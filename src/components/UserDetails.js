@@ -60,12 +60,14 @@ class UserDetails extends Component {
           <div>
             <div className='section'>
               <div className="right">
-                <button className="btn right waves-effect waves-light white text-darken-3 red-text">
+                <button className={'btn right waves-effect waves-light' +
+                    'white text-darken-3 red-text'}>
                   Edit
                   <i className="material-icons right">edit</i>
                 </button>
                 &nbsp;
-                <button className="btn left waves-effect waves-light white text-darken-3 red-text">
+                <button className={'btn left waves-effect waves-light' +
+                    'white text-darken-3 red-text'}>
                   Manage Bookings
                   <i className="material-icons right">book</i>
                 </button>
@@ -102,14 +104,18 @@ class UserDetails extends Component {
 
             <div className="section">
               <ul className="collection with-header">
-                <li className="collection-header"><h6>Current Bookings</h6></li>
+                <li className="collection-header">
+                  <h6>Current Bookings</h6>
+                </li>
                 {currentBookings.map(this.displayBooking)}
               </ul>
             </div>
 
             <div className="section">
               <ul className="collection with-header">
-                <li className="collection-header"><h6>Previous Bookings</h6></li>
+                <li className="collection-header">
+                  <h6>Previous Bookings</h6>
+                </li>
                 {previousBookings.map(this.displayBooking)}
               </ul>
             </div>

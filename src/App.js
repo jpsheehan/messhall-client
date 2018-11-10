@@ -63,6 +63,7 @@ class App extends Component {
 
     if (this.isLoggedIn()) {
 
+      document.body.classList.remove('red', 'darken-3');
       return (
         <div>
           <NavBar />
@@ -72,6 +73,7 @@ class App extends Component {
 
     } else {
 
+      document.body.classList.add('red', 'darken-3');
       return (<SignIn />);
 
     }

@@ -7,3 +7,24 @@ nav {
   padding: 1em;
   border: 2px solid black;
 }
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+.material-icons.md-64 { font-size: 64px; }
+
+#sign-in {
+  margin-top: 6em;
+  padding: 2em;
+  border: 3px solid black;
+}
+
+.flex-grow {
+  flex: 1 0 auto;
+}
+
+body {
+  flex: 1 0 auto;
+}

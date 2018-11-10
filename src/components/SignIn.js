@@ -24,10 +24,20 @@ class SignIn extends Component {
   }
 
   /**
+   * Helps the user reset their password.
+   * @param {Event} event The event passed from the DOM
+   */
+  forgotPassword(event) {
+
+    alert('Too bad!');
+
+  }
+
+  /**
    * Called when the user clicks the submit button.
    * @param {Event} event The event object.
    */
-  submitForm(event) {
+  signIn(event) {
 
     event.preventDefault();
 
@@ -79,10 +89,15 @@ class SignIn extends Component {
 
     return (
       <div className='row'>
-        <div id='sign-in' className='col s6 offset-s3'>
-          <h5>Sign In</h5>
+        <div id='sign-in' className='col s4 offset-s4 white'>
+          <div className="center-align">
+            <i className="material-icons md-64">fastfood</i><br />
+            <h3>Appetite</h3>
+            <i>A new way to have your say</i>
+          </div>
+
           <div>
-            <form onSubmit={this.submitForm.bind(this)}>
+            <form>
 
               <div className="input-field">
                 <label htmlFor='sign-in-email'>Email:</label>
@@ -97,12 +112,14 @@ class SignIn extends Component {
                   onChange={(e) => this.setState({password: e.target.value})} />
               </div>
 
-              <button className='btn waves-effect waves-light'>
+              <button onClick={(ev) => this.signIn(ev)}
+                className='btn waves-effect waves-light white-text grey darken-2'>
                 Sign In
                 <i className="material-icons right">person</i>
               </button>
 
-              <button className='btn waves-effect right'>
+              <button onClick={(ev) => this.forgotPassword(ev)}
+                className='btn waves-effect waves-light white-text grey darken-2 right'>
                 Forgot Password
               </button>
 
