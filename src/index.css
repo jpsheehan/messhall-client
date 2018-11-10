@@ -1,0 +1,9 @@
+nav {
+  padding-left: 1em;
+  margin-bottom: 2em;
+}
+
+#user-details {
+  padding: 1em;
+  border: 2px solid black;
+}

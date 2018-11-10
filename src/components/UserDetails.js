@@ -58,53 +58,61 @@ class UserDetails extends Component {
         return (
 
           <div>
-            <div className="right">
-              <button className="btn right waves-effect waves-light">
-                Edit
-                <i className="material-icons right">edit</i>
-              </button>
-              &nbsp;
-              <button className="btn left waves-effect waves-light">
-                Manage Bookings
-                <i className="material-icons right">book</i>
-              </button>
+            <div className='section'>
+              <div className="right">
+                <button className="btn right waves-effect waves-light white text-darken-3 red-text">
+                  Edit
+                  <i className="material-icons right">edit</i>
+                </button>
+                &nbsp;
+                <button className="btn left waves-effect waves-light white text-darken-3 red-text">
+                  Manage Bookings
+                  <i className="material-icons right">book</i>
+                </button>
+              </div>
+
+              <div className="user-details-name">
+                <h4>{user.lastName}, {user.firstName}</h4>
+              </div>
+              <div className="user-details-id">
+                <h5>{user.id}</h5>
+              </div>
             </div>
 
-            <div className="user-details-name">
-              <h4>{user.lastName}, {user.firstName}</h4>
+            <div className="section">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{user.name}</td>
+                    <td>{user.phone ? 'tel:' + user.phone : 'N/A'}</td>
+                    <td>
+                      <a href={'mailto:' + user.email}>{user.email}</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div className="user-details-id">
-              <h5>{user.id}</h5>
+
+            <div className="section">
+              <ul className="collection with-header">
+                <li className="collection-header"><h6>Current Bookings</h6></li>
+                {currentBookings.map(this.displayBooking)}
+              </ul>
             </div>
 
-            <table>
-              <thead>
-                <tr>
-                  <th>Full Name</th>
-                  <th>Phone</th>
-                  <th>Email</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{user.name}</td>
-                  <td>{user.phone ? 'tel:' + user.phone : 'N/A'}</td>
-                  <td>
-                    <a href={'mailto:' + user.email}>{user.email}</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <ul className="collection with-header">
-              <li className="collection-header"><h6>Current Bookings</h6></li>
-              {currentBookings.map(this.displayBooking)}
-            </ul>
-
-            <ul className="collection with-header">
-              <li className="collection-header"><h6>Previous Bookings</h6></li>
-              {previousBookings.map(this.displayBooking)}
-            </ul>
+            <div className="section">
+              <ul className="collection with-header">
+                <li className="collection-header"><h6>Previous Bookings</h6></li>
+                {previousBookings.map(this.displayBooking)}
+              </ul>
+            </div>
           </div>
 
         );
@@ -148,7 +156,7 @@ class UserDetails extends Component {
 
     return (
 
-      <div id="user-details">
+      <div id="user-details" className='grey lighten-3'>
 
         {this.displayUserDetails()}
 

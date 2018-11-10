@@ -8,6 +8,7 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 // import UserList from './components/UserList';
 // import CreateUser from './components/CreateUser';
 import AdminPortal from './components/AdminPortal';
+import NavBar from './components/NavBar';
 // import SignIn from './components/SignIn';
 
 const httpLink = createHttpLink({
@@ -46,6 +47,7 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <div id="main">
+          <NavBar />
           <AdminPortal />
         </div>
       </ApolloProvider>
