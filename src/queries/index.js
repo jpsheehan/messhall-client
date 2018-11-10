@@ -7,6 +7,10 @@ const getUsersQuery = gql`
       name
       email
       role
+      history {
+        date
+        type
+      }
     }
   }
 `;

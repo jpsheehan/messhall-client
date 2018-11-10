@@ -42,9 +42,32 @@ class UserList extends Component {
       // data is ready
       return data.users.map((user) => {
 
+        const numCurrentBookings = user.history.reduce((sum, booking) => {
+
+          const date = new Date(booking.date);
+          return sum
+              + (date >= Date.now() && booking.type === 'attendance') ? 1 : 0;
+
+        }, 0);
+        const numTotalBookings = user.history.reduce((sum, booking) => {
+
+          return sum + (booking.type === 'attendance') ? 1 : 0;
+
+        }, 0);
+
         return (
-          <li onClick={(e) => this.setState({selected: user.id})}
-            key={user.id}>{user.name} ({user.email}, {user.role})</li>
+          <tr onClick={(e) => this.setState({selected: user.id})} key={user.id}>
+            <td>
+              {user.name}<br />
+              {user.id}
+            </td>
+            <td>
+              {numCurrentBookings}
+            </td>
+            <td>
+              {numTotalBookings}
+            </td>
+          </tr>
         );
 
       });
@@ -61,9 +84,18 @@ class UserList extends Component {
 
     return (
       <div>
-        <ul id='user-list'>
-          {this.displayUsers()}
-        </ul>
+        <table className='striped'>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Current Bookings</th>
+              <th>Total Bookings</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.displayUsers()}
+          </tbody>
+        </table>
 
         <UserDetails userId={this.state.selected} />
       </div>
