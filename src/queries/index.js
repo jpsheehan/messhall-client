@@ -11,6 +11,30 @@ const getUsersQuery = gql`
   }
 `;
 
+const getUserDetailsQuery = gql`
+  query ($id: Int!) {
+    user(id: $id) {
+      id
+      name
+      firstName
+      lastName
+      email
+      role
+      points
+      history {
+        id
+        date
+        points
+        type
+        reward {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
 const createUserMutation = gql`
   mutation($firstName: String!, $lastName: String!,
     $email: String!, $password: String!, $role: String!) {
@@ -28,6 +52,41 @@ const createUserMutation = gql`
   }
 `;
 
+const createTokenMutation = gql`
+  mutation ($email: String!, $password: String!) {
+
+    createToken(input: {email: $email, password: $password}) {
+
+      user {
+        id
+        name
+        email
+      }
+      token
+
+    }
+
+  }
+`;
+
+const deleteTokenMutation = gql`
+
+  mutation ($id: Int!) {
+
+    deleteToken(input: {id: $id}) {
+
+      token {
+        id
+        uuid
+      }
+
+    }
+
+  }
+
+`;
+
 export {
-  getUsersQuery, createUserMutation,
+  getUsersQuery, createUserMutation, getUserDetailsQuery,
+  createTokenMutation, deleteTokenMutation,
 };

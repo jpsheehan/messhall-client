@@ -5,8 +5,9 @@ import {createHttpLink} from 'apollo-link-http';
 import {setContext} from 'apollo-link-context';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 
-import UserList from './components/UserList';
-import CreateUser from './components/CreateUser';
+// import UserList from './components/UserList';
+// import CreateUser from './components/CreateUser';
+import SignIn from './components/SignIn';
 
 const httpLink = createHttpLink({
   uri: 'http://127.0.0.1:3000/graphql',
@@ -45,8 +46,9 @@ class App extends Component {
       <ApolloProvider client={client}>
         <div id="main">
           <h1>App</h1>
-          <UserList />
-          <CreateUser />
+          {/* <UserList />
+          <CreateUser /> */}
+          <SignIn />
         </div>
       </ApolloProvider>
     );

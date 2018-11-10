@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
 
-import {createUserMutation} from '../queries';
+import {createUserMutation, getUsersQuery} from '../queries';
 
 /**
  * The component for creating new Users
@@ -42,9 +42,12 @@ class CreateUser extends Component {
 
     } else {
 
-      // the passwords match
+      // the passwords match, create the user and refetch the user list
       this.props.createUserMutation({
         variables: this.state,
+        refetchQueries: [{
+          query: getUsersQuery,
+        }],
       });
 
     }
