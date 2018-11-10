@@ -9,7 +9,7 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 // import CreateUser from './components/CreateUser';
 import AdminPortal from './components/AdminPortal';
 import NavBar from './components/NavBar';
-// import SignIn from './components/SignIn';
+import SignIn from './components/SignIn';
 
 const httpLink = createHttpLink({
   uri: 'http://127.0.0.1:3000/graphql',
@@ -47,13 +47,52 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <div id="main">
-          <NavBar />
-          <AdminPortal />
+          {this.renderContext()}
         </div>
       </ApolloProvider>
     );
 
   }
+
+  /**
+   * Renders different components depending on whether or not the user is logged
+   * in.
+   * @return {*}
+   */
+  renderContext() {
+
+    if (this.isLoggedIn()) {
+
+      return (
+        <div>
+          <NavBar />
+          <AdminPortal />
+        </div>
+      );
+
+    } else {
+
+      return (<SignIn />);
+
+    }
+
+  }
+
+  /**
+   * Gets whether or not the user is logged in.
+   * @return {Boolean}
+   */
+  isLoggedIn() {
+
+    return (
+      localStorage.getItem('user_name') &&
+      localStorage.getItem('user_id') &&
+      localStorage.getItem('token') &&
+      localStorage.getItem('token_id')
+    );
+
+  }
+
 }
 
 export default App;

@@ -59,14 +59,19 @@ const createUserMutation = gql`
 const createTokenMutation = gql`
   mutation ($email: String!, $password: String!) {
 
-    createToken(input: {email: $email, password: $password}) {
+    createSuperToken(input: {email: $email, password: $password}) {
 
       user {
         id
         name
-        email
+        role
       }
-      token
+
+      authToken
+
+      token {
+        id
+      }
 
     }
 
@@ -78,12 +83,9 @@ const deleteTokenMutation = gql`
   mutation ($id: Int!) {
 
     deleteToken(input: {id: $id}) {
-
-      token {
+      user {
         id
-        uuid
       }
-
     }
 
   }

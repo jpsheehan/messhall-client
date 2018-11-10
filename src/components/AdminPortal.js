@@ -44,7 +44,8 @@ class AdminPortal extends Component {
         <div className='row'>
 
           <div className="col s4">
-            <button className="btn waves-effect waves-light white-text grey darken-2">
+            <button
+              className="btn waves-effect waves-light white-text grey darken-2">
               New User
               <i className="material-icons right">add</i>
             </button>

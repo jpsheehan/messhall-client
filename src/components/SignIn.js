@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 import {createTokenMutation} from '../queries';
 import {graphql, compose} from 'react-apollo';
@@ -29,13 +30,44 @@ class SignIn extends Component {
   submitForm(event) {
 
     event.preventDefault();
-    /**
-     * TODO: Sign the user in and store the token, handling any errors
-     */
 
-    //  this.props.createTokenMutation({
-    //    variables: this.state,
-    //  });
+    this.props.createTokenMutation({
+      variables: this.state,
+    }).then(({data}) => {
+
+      try {
+
+        const authToken = data.createSuperToken.authToken;
+        const token = data.createSuperToken.token;
+        const user = data.createSuperToken.user;
+
+        if (user.role === 'manager' || user.role === 'admin') {
+
+          localStorage.setItem('token', authToken);
+          localStorage.setItem('token_id', token.id);
+          localStorage.setItem('user_name', user.name);
+          localStorage.setItem('user_id', user.id);
+
+          // TODO: replace this with proper react routing
+          window.location.reload();
+
+        } else {
+
+          alert('Users cannot sign in to the admin panel!');
+
+        }
+
+      } catch (err) {
+
+        alert(err);
+
+      }
+
+    }).catch((err) => {
+
+      alert(err.message);
+
+    });
 
   }
 
@@ -85,7 +117,7 @@ class SignIn extends Component {
 }
 
 SignIn.propTypes = {
-  createTokenMutation,
+  createTokenMutation: PropTypes.any,
 };
 
 export default compose(
