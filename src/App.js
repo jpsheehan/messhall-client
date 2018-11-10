@@ -5,8 +5,9 @@ import {createHttpLink} from 'apollo-link-http';
 import {setContext} from 'apollo-link-context';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 
-import UserList from './components/UserList';
-import CreateUser from './components/CreateUser';
+// import UserList from './components/UserList';
+// import CreateUser from './components/CreateUser';
+import AdminPortal from './components/AdminPortal';
 // import SignIn from './components/SignIn';
 
 const httpLink = createHttpLink({
@@ -45,10 +46,7 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <div id="main">
-          <h1>App</h1>
-          <UserList />
-          <CreateUser />
-          {/* <SignIn /> */}
+          <AdminPortal />
         </div>
       </ApolloProvider>
     );

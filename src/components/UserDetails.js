@@ -20,7 +20,21 @@ class UserDetails extends Component {
     if (data.loading) {
 
       // data is not ready
-      return (<div>Loading...</div>);
+      return (
+        <div className="align-center valign-wrapper">
+          <div className="preloader-wrapper active">
+            <div className="spinner-layer spinner-red-only">
+              <div className="circle-clipper left">
+                <div className="circle"></div>
+              </div><div className="gap-patch">
+                <div className="circle"></div>
+              </div><div className="circle-clipper right">
+                <div className="circle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
 
     } else {
 

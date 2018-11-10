@@ -4,8 +4,6 @@ import {graphql} from 'react-apollo';
 
 import {getUsersQuery} from '../queries';
 
-import UserDetails from './UserDetails';
-
 /**
  * Displays a list of registered users
  */
@@ -35,7 +33,23 @@ class UserList extends Component {
     if (data.loading) {
 
       // data is not ready
-      return (<div>Loading users...</div>);
+      return (
+        <tr>
+          <td colSpan='3' className='center-align'>
+            <div className="preloader-wrapper active">
+              <div className="spinner-layer spinner-red-only">
+                <div className="circle-clipper left">
+                  <div className="circle"></div>
+                </div><div className="gap-patch">
+                  <div className="circle"></div>
+                </div><div className="circle-clipper right">
+                  <div className="circle"></div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      );
 
     } else {
 
@@ -46,19 +60,20 @@ class UserList extends Component {
 
           const date = new Date(booking.date);
           return sum
-              + (date >= Date.now() && booking.type === 'attendance') ? 1 : 0;
+              + (date >= Date.now() && booking.type === 'attendance' ? 1 : 0);
 
         }, 0);
         const numTotalBookings = user.history.reduce((sum, booking) => {
 
-          return sum + (booking.type === 'attendance') ? 1 : 0;
+          return sum + (booking.type === 'attendance' ? 1 : 0);
 
         }, 0);
 
         return (
-          <tr onClick={(e) => this.setState({selected: user.id})} key={user.id}>
+          <tr href='#!' onClick={(e) => this.props.callback(user.id)} key={user.id}>
             <td>
-              {user.name}<br />
+              <b>{user.name}</b>
+              <br />
               {user.id}
             </td>
             <td>
@@ -84,9 +99,9 @@ class UserList extends Component {
 
     return (
       <div>
-        <table className='striped'>
+        <table className='highlight'>
           <thead>
-            <tr>
+            <tr className='grey lighten-3'>
               <th>User</th>
               <th>Current Bookings</th>
               <th>Total Bookings</th>
@@ -96,8 +111,6 @@ class UserList extends Component {
             {this.displayUsers()}
           </tbody>
         </table>
-
-        <UserDetails userId={this.state.selected} />
       </div>
     );
 
@@ -107,6 +120,7 @@ class UserList extends Component {
 
 UserList.propTypes = {
   data: PropTypes.object,
+  callback: PropTypes.function,
 };
 
 export default graphql(getUsersQuery)(UserList);
