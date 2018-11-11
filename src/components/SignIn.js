@@ -1,8 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import {createTokenMutation} from '../queries';
 import {graphql, compose} from 'react-apollo';
+
+import BasicDialog from './BasicDialog';
 
 /**
  * The component for signing a user in to the admin panel.
@@ -19,7 +21,11 @@ class SignIn extends Component {
     this.state = {
       email: '',
       password: '',
+      errorTitle: 'Error',
+      errorMessage: 'Message',
+      errorShown: false,
     };
+    this.errorDialog = createRef();
 
   }
 
@@ -63,24 +69,88 @@ class SignIn extends Component {
 
         } else {
 
-          alert('Users cannot sign in to the admin panel!');
 
         }
 
       } catch (err) {
 
-        alert(err);
+        ;
 
       }
 
     }).catch((err) => {
 
-      alert(err.message);
+      if (err.toString().indexOf('Invalid email or password.') !== -1) {
+
+        // email or password was incorrect
+        this.showAuthenticationError();
+
+      } else if (err.toString().indexOf('User does not have proper permissions to create a token') !== -1) {
+
+        // users aren't allowed to use this portal!
+        this.showAuthorizationError();
+
+
+      } else {
+
+        // something else went wrong
+        console.error(err);
+        this.showUnknownError();
+
+      }
 
     });
 
   }
 
+  /**
+   * Displays an authentication error to the user.
+   */
+  showAuthenticationError() {
+
+    this.setState({
+      errorTitle: 'Authentication Error',
+      errorMessage: 'There was an error signing you in. Please check that your email address and password were entered correctly.',
+      errorShown: true,
+    });
+
+  }
+
+  /**
+   * Displays an authorization error message to the user.
+   */
+  showAuthorizationError() {
+
+    this.setState({
+      errorTitle: 'Authorization Error',
+      errorMessage: 'There was an error signing you in. You must use the mobile app to use this service.',
+      errorShown: true,
+    });
+
+  }
+
+  /**
+   * Displays an unknown error message to the user.
+   */
+  showUnknownError() {
+
+    // email or password was incorrect
+    this.setState({
+      errorTitle: 'Unknown Error',
+      errorMessage: 'An unknown error occurred while signing you in. Please try again later',
+      errorShown: true,
+    });
+
+  }
+
+  /**
+   * To be called when the ErrorDialog child is closed.
+   */
+  onErrorDialogClose() {
+
+    this.setState({errorShown: false});
+
+  }
   /**
    * Renders the component.
    * @return {*}
@@ -126,6 +196,11 @@ class SignIn extends Component {
             </form>
           </div>
         </div>
+        <BasicDialog
+          title={this.state.errorTitle}
+          message={this.state.errorMessage}
+          open={this.state.errorShown}
+          onClose={() => this.onErrorDialogClose()} />
       </div>
     );
 
