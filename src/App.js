@@ -10,6 +10,7 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 import AdminPortal from './components/AdminPortal';
 import NavBar from './components/NavBar';
 import SignIn from './components/SignIn';
+import ManagerPortal from './components/ManagerPortal';
 
 const httpLink = createHttpLink({
   uri: 'http://127.0.0.1:3000/graphql',
@@ -63,11 +64,17 @@ class App extends Component {
 
     if (this.isLoggedIn()) {
 
+      const role = localStorage.getItem('user_role') === 'admin'
+          ? (<AdminPortal />)
+          : (localStorage.getItem('user_role') === 'manager')
+              ? (<ManagerPortal />)
+              : 'Error';
+
       document.body.classList.remove('red', 'darken-3');
       return (
         <div>
           <NavBar />
-          <AdminPortal />
+          {role}
         </div>
       );
 
@@ -89,6 +96,7 @@ class App extends Component {
     return (
       localStorage.getItem('user_name') &&
       localStorage.getItem('user_id') &&
+      localStorage.getItem('user_role') &&
       localStorage.getItem('token') &&
       localStorage.getItem('token_id')
     );

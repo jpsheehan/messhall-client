@@ -57,6 +57,7 @@ class SignIn extends Component {
           localStorage.setItem('token_id', token.id);
           localStorage.setItem('user_name', user.name);
           localStorage.setItem('user_id', user.id);
+          localStorage.setItem('user_role', user.role);
 
           // TODO: replace this with proper react routing
           window.location.reload();
