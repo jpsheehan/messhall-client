@@ -1,10 +1,12 @@
 import React, {Component, createRef} from 'react';
 import PropTypes from 'prop-types';
 
-import {createTokenMutation} from '../queries';
 import {graphql, compose} from 'react-apollo';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 
 import BasicDialog from './BasicDialog';
+import {createTokenMutation} from '../queries';
 
 /**
  * The component for signing a user in to the admin panel.
@@ -182,16 +184,14 @@ class SignIn extends Component {
                   onChange={(e) => this.setState({password: e.target.value})} />
               </div>
 
-              <button onClick={(ev) => this.signIn(ev)}
-                className='btn waves-effect waves-light white-text grey darken-2'>
+              <Button type='submit' variant='outlined' onClick={(ev) => this.signIn(ev)}>
                 Sign In
-                <i className="material-icons right">person</i>
-              </button>
+                <Icon>person</Icon>
+              </Button>
 
-              <button onClick={(ev) => this.forgotPassword(ev)}
-                className='btn waves-effect waves-light white-text grey darken-2 right'>
+              <Button className='right' onClick={(ev) => this.forgotPassword(ev)}>
                 Forgot Password
-              </button>
+              </Button>
 
             </form>
           </div>
