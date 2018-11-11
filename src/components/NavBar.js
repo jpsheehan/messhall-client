@@ -3,6 +3,7 @@ import {graphql} from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import {deleteTokenMutation} from '../queries';
+import {isLoggedIn} from '../utils';
 
 /**
  * The NavBar component is displayed at the top of the page.
@@ -41,7 +42,7 @@ class NavBar extends Component {
    */
   render() {
 
-    if (this.isLoggedIn()) {
+    if (isLoggedIn()) {
 
       document.body.classList.remove('red', 'darken-3');
       return (
@@ -71,22 +72,6 @@ class NavBar extends Component {
       return (<div></div>);
 
     }
-
-  }
-
-  /**
-   * Gets whether or not the user is logged in.
-   * @return {Boolean}
-   */
-  isLoggedIn() {
-
-    return (
-      localStorage.getItem('user_name') &&
-      localStorage.getItem('user_id') &&
-      localStorage.getItem('user_role') &&
-      localStorage.getItem('token') &&
-      localStorage.getItem('token_id')
-    );
 
   }
 

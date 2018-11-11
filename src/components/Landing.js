@@ -1,5 +1,7 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
+
+import {isLoggedIn} from '../utils';
 
 /**
  * The default landing page
@@ -7,16 +9,15 @@ import {Link} from 'react-router-dom';
  */
 function Landing() {
 
-  return (
-    <div id='landing'>
-      <h1>Appetite</h1>
-      <p>
-        Welcome, etc.
-        <br />
-        <Link to='/sign-in'>Sign In</Link>
-      </p>
-    </div>
-  );
+  if (isLoggedIn()) {
+
+    return (<Redirect to={'/' + localStorage.getItem('user_role')} />);
+
+  } else {
+
+    return (<Redirect to='/sign-in' />);
+
+  }
 
 }
 
