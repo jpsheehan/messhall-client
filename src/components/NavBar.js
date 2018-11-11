@@ -7,6 +7,7 @@ import {deleteTokenMutation} from '../queries';
 /**
  * The NavBar component is displayed at the top of the page.
  * It shows the logged in user's name and an option to sign out.
+ * If the user is not logged in, the NavBar displays nothing.
  */
 class NavBar extends Component {
 
@@ -19,11 +20,11 @@ class NavBar extends Component {
       variables: {
         id: parseInt(localStorage.getItem('token_id')),
       },
-    }).then(({data}) => {
+    }).then((_) => {
 
+      // sign the user out locally and redirect to the login screen
       localStorage.clear();
-      // TODO: Make this better!
-      window.location.reload();
+      this.props.history.push('/sign-in');
 
     }).catch((err) => {
 
@@ -40,33 +41,51 @@ class NavBar extends Component {
    */
   render() {
 
-    let navbarContents = '';
+    if (this.isLoggedIn()) {
 
-    if (localStorage.getItem('token') && localStorage.getItem('user_name')) {
-
-      navbarContents = (
-        <ul id="nav-mobile" className="right hide-on-med-and-down">
-          <li><b>{localStorage.getItem('user_name')}</b></li>
-          <li>
-            <a href='#!' onClick={(e) => this.signOut()}>
-              <i className="material-icons">exit_to_app</i>
-            </a>
-          </li>
-        </ul>
+      document.body.classList.remove('red', 'darken-3');
+      return (
+        <header>
+          <nav className='red darken-3'>
+            <div className="nav-wrapper">
+              <a href="#!" className="brand-logo">
+                <i className="material-icons">fastfood</i>
+                Appetite
+              </a>
+              <ul id="nav-mobile" className="right hide-on-med-and-down">
+                <li><b>{localStorage.getItem('user_name')}</b></li>
+                <li>
+                  <a href='#!' onClick={(e) => this.signOut()}>
+                    <i className="material-icons">exit_to_app</i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </header>
       );
+
+    } else {
+
+      document.body.classList.add('red', 'darken-3');
+      return (<div></div>);
 
     }
 
+  }
+
+  /**
+   * Gets whether or not the user is logged in.
+   * @return {Boolean}
+   */
+  isLoggedIn() {
+
     return (
-      <nav className='red darken-3'>
-        <div className="nav-wrapper">
-          <a href="#!" className="brand-logo">
-            <i className="material-icons">fastfood</i>
-            Appetite
-          </a>
-          {navbarContents}
-        </div>
-      </nav>
+      localStorage.getItem('user_name') &&
+      localStorage.getItem('user_id') &&
+      localStorage.getItem('user_role') &&
+      localStorage.getItem('token') &&
+      localStorage.getItem('token_id')
     );
 
   }
@@ -74,7 +93,8 @@ class NavBar extends Component {
 }
 
 NavBar.propTypes = {
-  deleteTokenMutation: PropTypes.function,
+  deleteTokenMutation: PropTypes.func,
+  history: PropTypes.object,
 };
 
 export default graphql(deleteTokenMutation, {

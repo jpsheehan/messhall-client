@@ -59,8 +59,7 @@ class SignIn extends Component {
           localStorage.setItem('user_id', user.id);
           localStorage.setItem('user_role', user.role);
 
-          // TODO: replace this with proper react routing
-          window.location.reload();
+          this.props.history.push('/' + user.role);
 
         } else {
 
@@ -136,6 +135,7 @@ class SignIn extends Component {
 
 SignIn.propTypes = {
   createTokenMutation: PropTypes.any,
+  history: PropTypes.any,
 };
 
 export default compose(

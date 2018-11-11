@@ -1,21 +1,23 @@
 import React, {Component} from 'react';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import ApolloClient from 'apollo-client';
 import {ApolloProvider} from 'react-apollo';
 import {createHttpLink} from 'apollo-link-http';
 import {setContext} from 'apollo-link-context';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 
-// import UserList from './components/UserList';
-// import CreateUser from './components/CreateUser';
-import AdminPortal from './components/AdminPortal';
+import Landing from './components/Landing';
 import NavBar from './components/NavBar';
 import SignIn from './components/SignIn';
 import ManagerPortal from './components/ManagerPortal';
+import AdminPortal from './components/AdminPortal';
 
+// setup the GraphQL endpoint
 const httpLink = createHttpLink({
   uri: 'http://127.0.0.1:3000/graphql',
 });
 
+// setup the authorization header
 const authLink = setContext((_, {headers}) => {
 
   const token = localStorage.getItem('token');
@@ -47,58 +49,18 @@ class App extends Component {
 
     return (
       <ApolloProvider client={client}>
-        <div id="main">
-          {this.renderContext()}
-        </div>
+        <BrowserRouter>
+          <div id="main">
+            <Route path="/" component={NavBar} />
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route path="/sign-in" component={SignIn} />
+              <Route path="/admin" component={AdminPortal} />
+              <Route path="/manager" component={ManagerPortal} />
+            </Switch>
+          </div>
+        </BrowserRouter>
       </ApolloProvider>
-    );
-
-  }
-
-  /**
-   * Renders different components depending on whether or not the user is logged
-   * in.
-   * @return {*}
-   */
-  renderContext() {
-
-    if (this.isLoggedIn()) {
-
-      const role = localStorage.getItem('user_role') === 'admin'
-          ? (<AdminPortal />)
-          : (localStorage.getItem('user_role') === 'manager')
-              ? (<ManagerPortal />)
-              : 'Error';
-
-      document.body.classList.remove('red', 'darken-3');
-      return (
-        <div>
-          <NavBar />
-          {role}
-        </div>
-      );
-
-    } else {
-
-      document.body.classList.add('red', 'darken-3');
-      return (<SignIn />);
-
-    }
-
-  }
-
-  /**
-   * Gets whether or not the user is logged in.
-   * @return {Boolean}
-   */
-  isLoggedIn() {
-
-    return (
-      localStorage.getItem('user_name') &&
-      localStorage.getItem('user_id') &&
-      localStorage.getItem('user_role') &&
-      localStorage.getItem('token') &&
-      localStorage.getItem('token_id')
     );
 
   }

@@ -54,38 +54,47 @@ class UserList extends Component {
     } else {
 
       // data is ready
-      return data.users.map((user) => {
+      if (data.users) {
 
-        const numCurrentBookings = user.history.reduce((sum, booking) => {
+        return data.users.map((user) => {
 
-          const date = new Date(booking.date);
-          return sum
-              + (date >= Date.now() && booking.type === 'attendance' ? 1 : 0);
+          const numCurrentBookings = user.history.reduce((sum, booking) => {
 
-        }, 0);
-        const numTotalBookings = user.history.reduce((sum, booking) => {
+            const date = new Date(booking.date);
+            return sum
+                + (date >= Date.now() && booking.type === 'attendance' ? 1 : 0);
 
-          return sum + (booking.type === 'attendance' ? 1 : 0);
+          }, 0);
+          const numTotalBookings = user.history.reduce((sum, booking) => {
 
-        }, 0);
+            return sum + (booking.type === 'attendance' ? 1 : 0);
 
-        return (
-          <tr href='#!' onClick={(e) => this.props.callback(user.id)} key={user.id}>
-            <td>
-              <b>{user.name}</b>
-              <br />
-              {user.id}
-            </td>
-            <td>
-              {numCurrentBookings}
-            </td>
-            <td>
-              {numTotalBookings}
-            </td>
-          </tr>
-        );
+          }, 0);
 
-      });
+          return (
+            <tr href='#!'
+              onClick={(e) => this.props.callback(user.id)} key={user.id}>
+              <td>
+                <b>{user.name}</b>
+                <br />
+                {user.id}
+              </td>
+              <td>
+                {numCurrentBookings}
+              </td>
+              <td>
+                {numTotalBookings}
+              </td>
+            </tr>
+          );
+
+        });
+      
+      } else {
+
+        return (<tr><td colSpan='3'></td></tr>);
+
+      }
 
     }
 
@@ -120,7 +129,7 @@ class UserList extends Component {
 
 UserList.propTypes = {
   data: PropTypes.object,
-  callback: PropTypes.function,
+  callback: PropTypes.func,
 };
 
 export default graphql(getUsersQuery)(UserList);
