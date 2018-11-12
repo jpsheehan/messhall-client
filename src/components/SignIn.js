@@ -1,4 +1,4 @@
-import React, {Component, createRef} from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
 
@@ -33,7 +33,6 @@ class SignIn extends Component {
       errorShown: false,
       loading: false,
     };
-    this.errorDialog = createRef();
 
   }
 
@@ -219,21 +218,27 @@ class SignIn extends Component {
               <br />
               <br />
 
-              <Button
-                type='submit'
-                variant='outlined'
-                onClick={(ev) => this.signIn(ev)}
-                disabled={this.state.loading}>
-                Sign In
-                <Icon>person</Icon>
-              </Button>
+              <Grid container justify='space-between'>
+                <Grid item>
+                  <Button
+                    type='submit'
+                    variant='outlined'
+                    onClick={(ev) => this.signIn(ev)}
+                    disabled={this.state.loading}>
+                    Sign In
+                    <Icon>person</Icon>
+                  </Button>
+                </Grid>
 
-              <Button
-                className='right'
-                onClick={(ev) => this.forgotPassword(ev)}
-                disabled={this.state.loading}>
-                Forgot Password
-              </Button>
+                <Grid item>
+                  <Button
+                    className='right'
+                    onClick={(ev) => this.forgotPassword(ev)}
+                    disabled={this.state.loading}>
+                    Forgot Password
+                  </Button>
+                </Grid>
+              </Grid>
 
             </form>
             {this.state.loading && <LinearProgress variant='query' />}
