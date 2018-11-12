@@ -43,7 +43,7 @@ class SignIn extends Component {
    */
   forgotPassword(event) {
 
-    alert('Too bad!');
+    this.props.history.push('/forgot-password');
 
   }
 
