@@ -134,7 +134,6 @@ class ForgotPassword extends Component {
   /**
    * Displays a message informing the user that the email has been sent
    * @param {String} email The email address the reset link was sent to
-   * @param {Function} callback The function to be called when the dialog is closed.
    */
   showEmailSent(email) {
 

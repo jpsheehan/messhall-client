@@ -4,7 +4,6 @@ import {graphql, compose} from 'react-apollo';
 
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
-import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -12,6 +11,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import BasicDialog from './BasicDialog';
 import {createTokenMutation} from '../queries';
+import BrandVertical from './BrandVertical';
 
 /**
  * The component for signing a user in to the admin panel.
@@ -182,14 +182,7 @@ class SignIn extends Component {
         <Grid item xs={3}>
           <Paper
             id='sign-in'>
-            <Typography variant='h3' align='center'>
-              <Icon className='md-64'>fastfood</Icon>
-              <br />
-              Appetite
-            </Typography>
-            <Typography variant='caption' align='center'>
-              A new way to have your say
-            </Typography>
+            <BrandVertical />
 
             <br />
 
@@ -235,7 +228,7 @@ class SignIn extends Component {
                     className='right'
                     onClick={(ev) => this.forgotPassword(ev)}
                     disabled={this.state.loading}>
-                    Forgot Password
+                    Help
                   </Button>
                 </Grid>
               </Grid>
