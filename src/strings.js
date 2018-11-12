@@ -49,3 +49,8 @@ export const forgotPasswordDialogTitle = 'Password Reset Sent';
 
 export const forgotPasswordDialogMessage = 'An email containing the password reset link has been sent to \'$EMAIL\'. Please check your inbox and follow the instructions.';
 
+/**
+ * UserList Component
+ */
+
+export const userListErrorLoading = 'Sorry, there was an error loading the data';

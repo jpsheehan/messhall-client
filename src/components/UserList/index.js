@@ -2,7 +2,15 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql} from 'react-apollo';
 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import ErrorIcon from '@material-ui/icons/Error';
+
 import {getUsersQuery} from '../../queries';
+import * as S from '../../strings';
 
 /**
  * Displays a list of registered users
@@ -17,8 +25,22 @@ class UserList extends Component {
 
     super(props);
     this.state = {
-      selected: null,
+      selectedIndex: -1,
+      loading: false,
     };
+
+  }
+
+  /**
+   * Handles the click event for a ListItem.
+   * @param {Event} event The click event.
+   * @param {Number} index The index of the list item.
+   * @param {Object} user The user that has been selected.
+   */
+  handleListItemClick(event, index, user) {
+
+    this.setState({selectedIndex: index});
+    this.props.callback(user.id);
 
   }
 
@@ -26,73 +48,60 @@ class UserList extends Component {
    * Renders the list of users
    * @return {*}
    */
-  displayUsers() {
+  renderListItems() {
 
     const data = this.props.data;
 
-    if (data.loading) {
+    if (data.loading === false) {
 
-      // data is not ready
-      return (
-        <tr>
-          <td colSpan='3' className='center-align'>
-            <div className="preloader-wrapper active">
-              <div className="spinner-layer spinner-red-only">
-                <div className="circle-clipper left">
-                  <div className="circle"></div>
-                </div><div className="gap-patch">
-                  <div className="circle"></div>
-                </div><div className="circle-clipper right">
-                  <div className="circle"></div>
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-      );
+      // data has finished loading and is ready
+      if (this.state.loading === true) {
 
-    } else {
+        this.setState({loading: false});
 
-      // data is ready
+      }
+
       if (data.users) {
 
-        return data.users.map((user) => {
-
-          const numCurrentBookings = user.history.reduce((sum, booking) => {
-
-            const date = new Date(booking.date);
-            return sum
-                + (date >= Date.now() && booking.type === 'attendance' ? 1 : 0);
-
-          }, 0);
-          const numTotalBookings = user.history.reduce((sum, booking) => {
-
-            return sum + (booking.type === 'attendance' ? 1 : 0);
-
-          }, 0);
+        // data was loaded ok
+        return data.users.map((user, index) => {
 
           return (
-            <tr href='#!'
-              onClick={(e) => this.props.callback(user.id)} key={user.id}>
-              <td>
-                <b>{user.name}</b>
-                <br />
-                {user.id}
-              </td>
-              <td>
-                {numCurrentBookings}
-              </td>
-              <td>
-                {numTotalBookings}
-              </td>
-            </tr>
+            <ListItem
+              button
+              key={index}
+              selected={this.state.selectedIndex === index}
+              onClick={(ev) => this.handleListItemClick(ev, index, user)}>
+              <ListItemText>
+                {user.name} ({user.id})
+              </ListItemText>
+            </ListItem>
           );
 
         });
-      
+
       } else {
 
-        return (<tr><td colSpan='3'></td></tr>);
+        // data could not load
+        return (
+          <ListItem>
+            <ListItemIcon>
+              <ErrorIcon />
+            </ListItemIcon>
+            <ListItemText>
+              {S.userListErrorLoading}
+            </ListItemText>
+          </ListItem>
+        );
+
+      }
+
+    } else {
+
+      // data is loading
+      if (this.state.loading === false) {
+
+        this.setState({loading: true});
 
       }
 
@@ -108,18 +117,10 @@ class UserList extends Component {
 
     return (
       <div>
-        <table className='highlight'>
-          <thead>
-            <tr className='grey lighten-3'>
-              <th>User</th>
-              <th>Current Bookings</th>
-              <th>Total Bookings</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.displayUsers()}
-          </tbody>
-        </table>
+        {this.state.loading && <LinearProgress color='primary' />}
+        <List component='nav'>
+          {this.renderListItems()}
+        </List>
       </div>
     );
 
