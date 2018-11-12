@@ -1,7 +1,7 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 
-import {isLoggedIn} from '../utils';
+import {isLoggedIn} from '../../utils';
 
 /**
  * The default landing page

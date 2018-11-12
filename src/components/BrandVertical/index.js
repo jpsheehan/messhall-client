@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/core/Icon';
 
-import {brandName, brandSlogan} from '../strings';
+import {brandName, brandSlogan} from '../../strings';
 
 /**
  * The component representing the vertical brand display.

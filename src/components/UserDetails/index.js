@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import {getUserDetailsQuery} from '../queries';
+import {getUserDetailsQuery} from '../../queries';
 
 /**
  * Displays details about a specific user.

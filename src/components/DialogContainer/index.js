@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import BasicDialog from './BasicDialog';
-import * as S from '../strings';
+import BasicDialog from '../BasicDialog';
+import * as S from '../../strings';
 
 /**
  * ...

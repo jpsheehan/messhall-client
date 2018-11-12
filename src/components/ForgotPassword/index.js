@@ -10,10 +10,10 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import BrandVertical from './BrandVertical';
-import {createPasswordResetMutation} from '../queries';
-import * as S from '../strings';
-import DialogContainer from './DialogContainer';
+import BrandVertical from '../BrandVertical';
+import {createPasswordResetMutation} from '../../queries';
+import * as S from '../../strings';
+import DialogContainer from '../DialogContainer';
 
 /**
  * The component for requesting a password reset for admins and managers.

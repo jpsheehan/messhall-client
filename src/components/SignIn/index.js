@@ -9,10 +9,10 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import {createTokenMutation} from '../queries';
-import BrandVertical from './BrandVertical';
-import DialogContainer from './DialogContainer';
-import * as S from '../strings';
+import {createTokenMutation} from '../../queries';
+import BrandVertical from '../BrandVertical';
+import DialogContainer from '../DialogContainer';
+import * as S from '../../strings';
 
 /**
  * The component for signing a user in to the admin panel.

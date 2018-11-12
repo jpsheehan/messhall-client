@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql} from 'react-apollo';
 
-import {getUsersQuery} from '../queries';
+import {getUsersQuery} from '../../queries';
 
 /**
  * Displays a list of registered users

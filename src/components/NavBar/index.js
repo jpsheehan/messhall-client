@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import {deleteTokenMutation} from '../queries';
-import {isLoggedIn} from '../utils';
+import {deleteTokenMutation} from '../../queries';
+import {isLoggedIn} from '../../utils';
 
 /**
  * The NavBar component is displayed at the top of the page.

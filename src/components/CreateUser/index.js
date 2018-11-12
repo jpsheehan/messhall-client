@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
 
-import {createUserMutation, getUsersQuery} from '../queries';
+import {createUserMutation, getUsersQuery} from '../../queries';
 
 /**
  * The component for creating new Users

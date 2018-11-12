@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-import UserList from './UserList';
-import UserDetails from './UserDetails';
+import UserList from '../UserList';
+import UserDetails from '../UserDetails';
 
 /**
  * Provides the user interface for the AdminPortal.
