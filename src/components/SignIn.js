@@ -9,9 +9,10 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import BasicDialog from './BasicDialog';
 import {createTokenMutation} from '../queries';
 import BrandVertical from './BrandVertical';
+import DialogContainer from './DialogContainer';
+import * as S from '../strings';
 
 /**
  * The component for signing a user in to the admin panel.
@@ -28,11 +29,9 @@ class SignIn extends Component {
     this.state = {
       email: '',
       password: '',
-      errorTitle: 'Error',
-      errorMessage: 'Message',
-      errorShown: false,
       loading: false,
     };
+    this.dialogRef = React.createRef();
 
   }
 
@@ -40,7 +39,7 @@ class SignIn extends Component {
    * Helps the user reset their password.
    * @param {Event} event The event passed from the DOM
    */
-  forgotPassword(event) {
+  onForgotPasswordClick(event) {
 
     this.props.history.push('/forgot-password');
 
@@ -50,14 +49,17 @@ class SignIn extends Component {
    * Called when the user clicks the submit button.
    * @param {Event} event The event object.
    */
-  signIn(event) {
+  onFormSubmit(event) {
 
     event.preventDefault();
 
     this.setState({loading: true});
 
     this.props.createTokenMutation({
-      variables: this.state,
+      variables: {
+        email: this.state.email,
+        password: this.state.password,
+      },
     }).then(({data}) => {
 
       try {
@@ -91,22 +93,25 @@ class SignIn extends Component {
 
     }).catch((err) => {
 
-      if (err.toString().indexOf('Invalid email or password.') !== -1) {
+      const msg = err.toString();
+      const dialog = this.dialogRef.current;
+
+      if (msg.indexOf(S.gqlResponseInvalidCredentials) !== -1) {
 
         // email or password was incorrect
-        this.showAuthenticationError();
+        dialog.showError('authentication');
 
-      } else if (err.toString().indexOf('User does not have proper permissions to create a token') !== -1) {
+      } else if (msg.indexOf(S.gqlResponseInvalidPermissions) !== -1) {
 
         // users aren't allowed to use this portal!
-        this.showAuthorizationError();
+        dialog.showError('authorization');
 
 
       } else {
 
         // something else went wrong
         console.error(err);
-        this.showUnknownError();
+        dialog.showError('unknown');
 
       }
 
@@ -119,130 +124,79 @@ class SignIn extends Component {
   }
 
   /**
-   * Displays an authentication error to the user.
-   */
-  showAuthenticationError() {
-
-    this.setState({
-      errorTitle: 'Authentication Error',
-      errorMessage: 'There was an error signing you in. Please check that your email address and password were entered correctly.',
-      errorShown: true,
-    });
-
-  }
-
-  /**
-   * Displays an authorization error message to the user.
-   */
-  showAuthorizationError() {
-
-    this.setState({
-      errorTitle: 'Authorization Error',
-      errorMessage: 'There was an error signing you in. You must use the mobile app to use this service.',
-      errorShown: true,
-    });
-
-  }
-
-  /**
-   * Displays an unknown error message to the user.
-   */
-  showUnknownError() {
-
-    // email or password was incorrect
-    this.setState({
-      errorTitle: 'Unknown Error',
-      errorMessage: 'An unknown error occurred while signing you in. Please try again later',
-      errorShown: true,
-    });
-
-  }
-
-  /**
-   * To be called when the ErrorDialog child is closed.
-   */
-  onErrorDialogClose() {
-
-    this.setState({errorShown: false});
-
-  }
-  /**
    * Renders the component.
    * @return {*}
    */
   render() {
 
     return (
-      <Grid
-        container
-        spacing={0}
-        directions='column'
-        alignItems='center'
-        justify='center'>
-        <Grid item xs={3}>
-          <Paper
-            id='sign-in'>
-            <BrandVertical />
-
-            <br />
-
-            <form>
-
-              <TextField
-                id='sign-in-email'
-                label='Email'
-                type='email'
-                fullWidth
-                margin='dense'
-                autoFocus
-                placeholder='johndoe@example.com'
-                onChange={(e) => this.setState({email: e.target.value})}
-                disabled={this.state.loading} />
-
-              <TextField
-                id='sign-in-password'
-                label='Password'
-                type='password'
-                fullWidth
-                margin='normal'
-                onChange={(e) => this.setState({password: e.target.value})}
-                disabled={this.state.loading} />
+      <DialogContainer ref={this.dialogRef}>
+        <Grid
+          container
+          spacing={0}
+          directions='column'
+          alignItems='center'
+          justify='center'>
+          <Grid item xs={3}>
+            <Paper
+              id='sign-in'>
+              <BrandVertical />
 
               <br />
+
+              <form onSubmit={(ev) => this.onFormSubmit(ev)}>
+
+                <TextField
+                  id='sign-in-email'
+                  label='Email'
+                  type='email'
+                  fullWidth
+                  margin='dense'
+                  autoFocus
+                  placeholder={S.placeholderEmail}
+                  onChange={(e) => this.setState({email: e.target.value})}
+                  disabled={this.state.loading} />
+
+                <TextField
+                  id='sign-in-password'
+                  label='Password'
+                  type='password'
+                  fullWidth
+                  margin='normal'
+                  onChange={(e) => this.setState({password: e.target.value})}
+                  disabled={this.state.loading} />
+
+                <br />
+                <br />
+
+                <Grid container justify='space-between'>
+                  <Grid item>
+                    <Button
+                      type='submit'
+                      variant='outlined'
+                      disabled={this.state.loading}>
+                      {S.buttonSignIn}
+                      <Icon>person</Icon>
+                    </Button>
+                  </Grid>
+
+                  <Grid item>
+                    <Button
+                      onClick={(ev) => this.onForgotPasswordClick(ev)}
+                      disabled={this.state.loading}>
+                      {S.buttonForgotPassword}
+                    </Button>
+                  </Grid>
+                </Grid>
+
+              </form>
               <br />
+              {this.state.loading && <LinearProgress variant='query' />}
+            </Paper>
 
-              <Grid container justify='space-between'>
-                <Grid item>
-                  <Button
-                    type='submit'
-                    variant='outlined'
-                    onClick={(ev) => this.signIn(ev)}
-                    disabled={this.state.loading}>
-                    Sign In
-                    <Icon>person</Icon>
-                  </Button>
-                </Grid>
-
-                <Grid item>
-                  <Button
-                    className='right'
-                    onClick={(ev) => this.forgotPassword(ev)}
-                    disabled={this.state.loading}>
-                    Help
-                  </Button>
-                </Grid>
-              </Grid>
-
-            </form>
-            {this.state.loading && <LinearProgress variant='query' />}
-          </Paper>
-          <BasicDialog
-            title={this.state.errorTitle}
-            message={this.state.errorMessage}
-            open={this.state.errorShown}
-            onClose={() => this.onErrorDialogClose()} />
+          </Grid>
         </Grid>
-      </Grid>
+      </DialogContainer>
     );
 
   }
