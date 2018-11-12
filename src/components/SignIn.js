@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import BasicDialog from './BasicDialog';
 import {createTokenMutation} from '../queries';
@@ -30,6 +31,7 @@ class SignIn extends Component {
       errorTitle: 'Error',
       errorMessage: 'Message',
       errorShown: false,
+      loading: false,
     };
     this.errorDialog = createRef();
 
@@ -52,6 +54,8 @@ class SignIn extends Component {
   signIn(event) {
 
     event.preventDefault();
+
+    this.setState({loading: true});
 
     this.props.createTokenMutation({
       variables: this.state,
@@ -106,6 +110,10 @@ class SignIn extends Component {
         this.showUnknownError();
 
       }
+
+    }).finally(() => {
+
+      this.setState({loading: false});
 
     });
 
@@ -173,7 +181,8 @@ class SignIn extends Component {
         alignItems='center'
         justify='center'>
         <Grid item xs={3}>
-          <Paper id='sign-in'>
+          <Paper
+            id='sign-in'>
             <Typography variant='h3' align='center'>
               <Icon className='md-64'>fastfood</Icon>
               <br />
@@ -195,7 +204,8 @@ class SignIn extends Component {
                 margin='dense'
                 autoFocus
                 placeholder='johndoe@example.com'
-                onChange={(e) => this.setState({email: e.target.value})} />
+                onChange={(e) => this.setState({email: e.target.value})}
+                disabled={this.state.loading} />
 
               <TextField
                 id='sign-in-password'
@@ -203,7 +213,8 @@ class SignIn extends Component {
                 type='password'
                 fullWidth
                 margin='normal'
-                onChange={(e) => this.setState({password: e.target.value})} />
+                onChange={(e) => this.setState({password: e.target.value})}
+                disabled={this.state.loading} />
 
               <br />
               <br />
@@ -211,18 +222,21 @@ class SignIn extends Component {
               <Button
                 type='submit'
                 variant='outlined'
-                onClick={(ev) => this.signIn(ev)}>
+                onClick={(ev) => this.signIn(ev)}
+                disabled={this.state.loading}>
                 Sign In
                 <Icon>person</Icon>
               </Button>
 
               <Button
                 className='right'
-                onClick={(ev) => this.forgotPassword(ev)}>
+                onClick={(ev) => this.forgotPassword(ev)}
+                disabled={this.state.loading}>
                 Forgot Password
               </Button>
 
             </form>
+            {this.state.loading && <LinearProgress variant='query' />}
           </Paper>
           <BasicDialog
             title={this.state.errorTitle}
