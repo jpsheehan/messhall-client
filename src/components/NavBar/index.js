@@ -2,8 +2,17 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import PropTypes from 'prop-types';
 
+import AppBar from '@material-ui/core/AppBar';
+import IconButton from '@material-ui/core/IconButton';
+import ToolBar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import ExitIcon from '@material-ui/icons/ExitToApp';
+import FoodIcon from '@material-ui/icons/Fastfood';
+
 import {deleteTokenMutation} from '../../queries';
 import {isLoggedIn} from '../../utils';
+import * as S from '../../strings';
+import './style.css';
 
 /**
  * The NavBar component is displayed at the top of the page.
@@ -47,22 +56,21 @@ class NavBar extends Component {
       document.body.classList.remove('background-red');
       return (
         <header>
-          <nav className='red darken-3'>
-            <div className="nav-wrapper">
-              <a href="#!" className="brand-logo">
-                <i className="material-icons">fastfood</i>
-                Appetite
-              </a>
-              <ul id="nav-mobile" className="right hide-on-med-and-down">
-                <li><b>{localStorage.getItem('user_name')}</b></li>
-                <li>
-                  <a href='#!' onClick={(e) => this.signOut()}>
-                    <i className="material-icons">exit_to_app</i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </nav>
+          <AppBar position='static'>
+            <ToolBar className='background-red'>
+              <FoodIcon className='logo' />
+              <Typography className='grow' color='inherit' variant='h6'>
+                {S.brandName}
+              </Typography>
+              <Typography color='inherit'>
+                {localStorage.getItem('user_name')}
+              </Typography>
+              &nbsp;
+              <IconButton color='inherit' onClick={(e) => this.signOut()}>
+                <ExitIcon color='inherit' />
+              </IconButton>
+            </ToolBar>
+          </AppBar>
         </header>
       );
 
