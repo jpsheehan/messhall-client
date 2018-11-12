@@ -92,7 +92,20 @@ const deleteTokenMutation = gql`
 
 `;
 
+const createPasswordResetMutation = gql`
+
+  mutation ($email: String!) {
+
+    createPasswordReset(input: {email: $email}) {
+      email
+    }
+
+  }
+
+`;
+
 export {
   getUsersQuery, createUserMutation, getUserDetailsQuery,
   createTokenMutation, deleteTokenMutation,
+  createPasswordResetMutation,
 };

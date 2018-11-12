@@ -11,6 +11,10 @@ import NavBar from './components/NavBar';
 import SignIn from './components/SignIn';
 import ManagerPortal from './components/ManagerPortal';
 import AdminPortal from './components/AdminPortal';
+import ForgotPassword from './components/ForgotPassword';
+
+// use the new material ui typography variants
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
 // setup the GraphQL endpoint
 const httpLink = createHttpLink({
@@ -57,6 +61,7 @@ class App extends Component {
               <Route path="/sign-in" component={SignIn} />
               <Route path="/admin" component={AdminPortal} />
               <Route path="/manager" component={ManagerPortal} />
+              <Route path='/forgot-password' component={ForgotPassword} />
             </Switch>
           </div>
         </BrowserRouter>
