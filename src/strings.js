@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 /**
  * Branding constants
  */
@@ -43,7 +45,7 @@ export const placeholderEmail = 'johndoe@example.com';
  * Forgot Password Page
  */
 
- export const forgotPasswordDialogTitle = 'Password Reset Sent';
+export const forgotPasswordDialogTitle = 'Password Reset Sent';
 
- export const forgotPasswordDialogMessage = 'An email containing the password reset link has been sent to \'$EMAIL\'. Please check your inbox and follow the instructions.';
+export const forgotPasswordDialogMessage = 'An email containing the password reset link has been sent to \'$EMAIL\'. Please check your inbox and follow the instructions.';
 

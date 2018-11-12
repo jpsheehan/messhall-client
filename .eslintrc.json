@@ -11,7 +11,8 @@
         "node": true
     },
     "rules":{
-        "padded-blocks": ["error", {"blocks": "always"}] 
+        "padded-blocks": ["error", {"blocks": "always"}],
+        "linebreak-style":"off"
     }
 
 }
