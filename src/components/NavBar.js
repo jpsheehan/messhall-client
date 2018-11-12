@@ -44,7 +44,7 @@ class NavBar extends Component {
 
     if (isLoggedIn()) {
 
-      document.body.classList.remove('red', 'darken-3');
+      document.body.classList.remove('background-red');
       return (
         <header>
           <nav className='red darken-3'>
@@ -68,7 +68,7 @@ class NavBar extends Component {
 
     } else {
 
-      document.body.classList.add('red', 'darken-3');
+      document.body.classList.add('background-red');
       return (<div></div>);
 
     }

@@ -18,13 +18,13 @@ nav {
 #sign-in {
   margin-top: 6em;
   padding: 2em;
-  border: 3px solid black;
 }
 
-.flex-grow {
-  flex: 1 0 auto;
+input:focus:not([read-only]) {
+	border-bottom: none!important;
+	box-shadow: none!important;	
 }
 
-body {
-  flex: 1 0 auto;
+.background-red {
+  background-color: #c62828;
 }

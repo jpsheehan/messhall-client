@@ -1,9 +1,13 @@
 import React, {Component, createRef} from 'react';
 import PropTypes from 'prop-types';
-
 import {graphql, compose} from 'react-apollo';
+
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 import BasicDialog from './BasicDialog';
 import {createTokenMutation} from '../queries';
@@ -71,12 +75,14 @@ class SignIn extends Component {
 
         } else {
 
+          throw new Error('User is not a manager or admin');
 
         }
 
       } catch (err) {
 
-        ;
+        console.error(err);
+        this.showUnknownError();
 
       }
 
@@ -160,48 +166,71 @@ class SignIn extends Component {
   render() {
 
     return (
-      <div className='row'>
-        <div id='sign-in' className='col s4 offset-s4 white'>
-          <div className="center-align">
-            <i className="material-icons md-64">fastfood</i><br />
-            <h3>Appetite</h3>
-            <i>A new way to have your say</i>
-          </div>
+      <Grid
+        container
+        spacing={0}
+        directions='column'
+        alignItems='center'
+        justify='center'>
+        <Grid item xs={3}>
+          <Paper id='sign-in'>
+            <Typography variant='h3' align='center'>
+              <Icon className='md-64'>fastfood</Icon>
+              <br />
+              Appetite
+            </Typography>
+            <Typography variant='caption' align='center'>
+              A new way to have your say
+            </Typography>
 
-          <div>
+            <br />
+
             <form>
 
-              <div className="input-field">
-                <label htmlFor='sign-in-email'>Email:</label>
-                <input id='sign-in-email' type='email' className='validate'
-                  onChange={(e) => this.setState({email: e.target.value})} />
-              </div>
+              <TextField
+                id='sign-in-email'
+                label='Email'
+                type='email'
+                fullWidth
+                margin='dense'
+                autoFocus
+                placeholder='johndoe@example.com'
+                onChange={(e) => this.setState({email: e.target.value})} />
 
-              <div className='input-field'>
-                <label htmlFor='sign-in-password'>Password:</label>
-                <input
-                  id='sign-in-password' type='password' className='validate'
-                  onChange={(e) => this.setState({password: e.target.value})} />
-              </div>
+              <TextField
+                id='sign-in-password'
+                label='Password'
+                type='password'
+                fullWidth
+                margin='normal'
+                onChange={(e) => this.setState({password: e.target.value})} />
 
-              <Button type='submit' variant='outlined' onClick={(ev) => this.signIn(ev)}>
+              <br />
+              <br />
+
+              <Button
+                type='submit'
+                variant='outlined'
+                onClick={(ev) => this.signIn(ev)}>
                 Sign In
                 <Icon>person</Icon>
               </Button>
 
-              <Button className='right' onClick={(ev) => this.forgotPassword(ev)}>
+              <Button
+                className='right'
+                onClick={(ev) => this.forgotPassword(ev)}>
                 Forgot Password
               </Button>
 
             </form>
-          </div>
-        </div>
-        <BasicDialog
-          title={this.state.errorTitle}
-          message={this.state.errorMessage}
-          open={this.state.errorShown}
-          onClose={() => this.onErrorDialogClose()} />
-      </div>
+          </Paper>
+          <BasicDialog
+            title={this.state.errorTitle}
+            message={this.state.errorMessage}
+            open={this.state.errorShown}
+            onClose={() => this.onErrorDialogClose()} />
+        </Grid>
+      </Grid>
     );
 
   }
