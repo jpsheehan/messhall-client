@@ -60,3 +60,11 @@ export const userListErrorLoading = 'Sorry, there was an error loading the data'
  */
 
 export const userDetailsErrorLoading = userListErrorLoading;
+
+/**
+ * CreateUser Component
+ */
+
+export const placeholderFirstName = 'John';
+
+export const placeholderLastName = 'Doe';

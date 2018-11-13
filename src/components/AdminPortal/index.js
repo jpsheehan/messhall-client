@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import {
   Button,
   Grid,
+  Dialog,
+  DialogTitle,
 } from '@material-ui/core';
 
 import {
@@ -11,6 +13,7 @@ import {
 
 import UserList from '../UserList';
 import UserDetails from '../UserDetails';
+import CreateUser from '../CreateUser';
 import './style.css';
 
 /**
@@ -27,7 +30,33 @@ class AdminPortal extends Component {
     super(props);
     this.state = {
       selected: null,
+      createUserDialogShown: false,
     };
+
+  }
+
+  /**
+   * Handles the CreateUser Dialog close event.
+   * @param {Object} user
+   */
+  handleCreateUserDialogClose(user) {
+
+    console.log('closing dialog');
+    if (this.state.createUserDialogShown === true) {
+
+      this.setState({createUserDialogShown: false});
+
+    }
+
+  }
+
+  /**
+   * Handles the button event for Create User.
+   * @param {Event} event
+   */
+  handleCreateUserButtonClick(event) {
+
+    this.setState({createUserDialogShown: true});
 
   }
 
@@ -53,7 +82,7 @@ class AdminPortal extends Component {
         <Grid container direction='row'>
           <Grid item container xs={4} direction='column'>
             <Grid item>
-              <Button>
+              <Button onClick={(ev) => this.handleCreateUserButtonClick(ev)}>
                 New User
                 <AddIcon />
               </Button>
@@ -66,6 +95,16 @@ class AdminPortal extends Component {
             <UserDetails userId={this.state.selected} />
           </Grid>
         </Grid>
+        <Dialog
+          open={this.state.createUserDialogShown}>
+          <DialogTitle id='create-user-dialog-title'>
+            Create New User
+          </DialogTitle>
+          <CreateUser callback={
+            (user) => this.handleCreateUserDialogClose(user)
+          } />
+        </Dialog>
+
       </div>
 
     );
