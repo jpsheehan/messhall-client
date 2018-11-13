@@ -3,11 +3,6 @@ nav {
   margin-bottom: 2em;
 }
 
-#user-details {
-  padding: 1em;
-  border: 2px solid black;
-}
-
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }

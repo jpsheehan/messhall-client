@@ -54,3 +54,9 @@ export const forgotPasswordDialogMessage = 'An email containing the password res
  */
 
 export const userListErrorLoading = 'Sorry, there was an error loading the data';
+
+/**
+ * UserDetails Component
+ */
+
+export const userDetailsErrorLoading = userListErrorLoading;

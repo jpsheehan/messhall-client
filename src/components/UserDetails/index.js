@@ -2,12 +2,40 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import PropTypes from 'prop-types';
 
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import BookIcon from '@material-ui/icons/Book';
+import ErrorIcon from '@material-ui/icons/Error';
+import EditIcon from '@material-ui/icons/Edit';
+
 import {getUserDetailsQuery} from '../../queries';
+import * as S from '../../strings';
+import './style.css';
 
 /**
  * Displays details about a specific user.
  */
 class UserDetails extends Component {
+
+  /**
+   * Creates a new instance of UserDetails.
+   * @param {Object} props The component's props.
+   */
+  constructor(props) {
+
+    super(props);
+    this.state = {
+      loading: false,
+    };
+
+  }
 
   /**
    * Displays the details about the particular user.
@@ -20,25 +48,21 @@ class UserDetails extends Component {
     if (data.loading) {
 
       // data is not ready
-      return (
-        <div className="align-center valign-wrapper">
-          <div className="preloader-wrapper active">
-            <div className="spinner-layer spinner-red-only">
-              <div className="circle-clipper left">
-                <div className="circle"></div>
-              </div><div className="gap-patch">
-                <div className="circle"></div>
-              </div><div className="circle-clipper right">
-                <div className="circle"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+      if (this.state.loading === false) {
+
+        this.setState({loading: true});
+
+      }
 
     } else {
 
-      if (data.user) {
+      if (this.state.loading === true) {
+
+        this.setState({loading: false});
+
+      }
+
+      if (data.user && data.user.id === this.props.userId) {
 
         // user was selected
         const user = data.user;
@@ -56,75 +80,106 @@ class UserDetails extends Component {
         });
 
         return (
+          <Paper id='user-details'>
+            <Grid container direction='column'>
+              <Grid item container direction='row' justify='space-between'>
+                <Grid item>
+                  <Typography variant='h4'>
+                    {user.lastName}, {user.firstName}
+                  </Typography>
+                </Grid>
+                <Grid item container direction='row' justify='flex-end'>
+                  <Grid item>
+                    <Button variant='contained'>
+                      Edit
+                      <EditIcon />
+                    </Button>
+                  </Grid>
+                  <Grid item><span className='space-right'></span></Grid>
+                  <Grid item>
+                    <Button variant='contained'>
+                      Manage Bookings
+                      <BookIcon />
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12}><div className='margin-1em'></div></Grid>
+              <Grid item container
+                justify='space-evenly' direction='row' className='center'>
+                <Grid item>
+                  <Typography variant='h6'>
+                    ID Number:
+                  </Typography>
+                  <br />
+                  <Typography>
+                    {user.id}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant='h6'>
+                    Phone Number:
+                  </Typography>
+                  <br />
+                  <Typography>
+                    {
+                      user.phone
+                        ? (<a href={'tel:' + user.phone}>{user.phone}</a>)
+                        : 'N/A'
+                    }
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant='h6'>
+                    Email:
+                  </Typography>
+                  <br />
+                  <Typography>
+                    <a href={'mailto:' + user.email}>{user.email}</a>
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
 
-          <div>
-            <div className='section'>
-              <div className="right">
-                <button className='btn right waves-effect waves-light white text-darken-3 red-text'>
-                  Edit
-                  <i className="material-icons right">edit</i>
-                </button>
-                &nbsp;
-                <button className='btn left waves-effect waves-light white text-darken-3 red-text'>
-                  Manage Bookings
-                  <i className="material-icons right">book</i>
-                </button>
-              </div>
-
-              <div className="user-details-name">
-                <h4>{user.lastName}, {user.firstName}</h4>
-              </div>
-              <div className="user-details-id">
-                <h5>{user.id}</h5>
-              </div>
-            </div>
-
-            <div className="section">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Full Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{user.name}</td>
-                    <td>{user.phone ? 'tel:' + user.phone : 'N/A'}</td>
-                    <td>
-                      <a href={'mailto:' + user.email}>{user.email}</a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="section">
-              <ul className="collection with-header">
-                <li className="collection-header">
-                  <h6>Current Bookings</h6>
-                </li>
-                {currentBookings.map(this.displayBooking)}
-              </ul>
-            </div>
-
-            <div className="section">
-              <ul className="collection with-header">
-                <li className="collection-header">
-                  <h6>Previous Bookings</h6>
-                </li>
-                {previousBookings.map(this.displayBooking)}
-              </ul>
-            </div>
-          </div>
+            <List component='nav'>
+              <li>
+                <ul>
+                  <ListSubheader>Current Bookings</ListSubheader>
+                  {
+                    currentBookings.map(
+                        (booking, index) =>
+                          this.renderBooking(booking, 'current', index)
+                    )
+                  }
+                </ul>
+              </li>
+              <li>
+                <ul>
+                  <ListSubheader>Previous Bookings</ListSubheader>
+                  {
+                    previousBookings.map(
+                        (booking, index) =>
+                          this.renderBooking(booking, 'previous', index)
+                    )
+                  }
+                </ul>
+              </li>
+            </List>
+          </Paper>
 
         );
 
       } else {
 
-        // no user selected
-        return (<div></div>);
+        // an error occurred loading the user
+        return (
+          <div className='center'>
+            <ErrorIcon />
+            <Typography variant='h5'>
+              {S.userDetailsErrorLoading}
+            </Typography>
+          </div>
+        );
 
       }
 
@@ -135,17 +190,20 @@ class UserDetails extends Component {
   /**
    * Renders a booking.
    * @param {Object} booking The booking.
+   * @param {String} section
+   * @param {Number} index
    * @return {*}
    */
-  displayBooking(booking) {
+  renderBooking(booking, section, index) {
 
     const date = new Date(booking.date);
 
     return (
-      <li className='booking collection-item'>
-        <p>Lunch - Facility</p>
-        <p>{date.toDateString()}</p>
-      </li>
+      <ListItem key={`item-${section}-${index}`}>
+        <ListItemText
+          primary='Lunch - Facility'
+          secondary={date.toDateString()} />
+      </ListItem>
     );
 
   }
@@ -158,15 +216,22 @@ class UserDetails extends Component {
 
     console.log(this.props);
 
-    return (
+    if (this.props.userId) {
 
-      <div id="user-details" className='grey lighten-3'>
+      // we have a userId so we can show the loading and user details
+      return (
+        <div id='user-details'>
+          {this.state.loading && <LinearProgress color='primary' />}
+          {this.displayUserDetails()}
+        </div>
+      );
 
-        {this.displayUserDetails()}
+    } else {
 
-      </div>
+      // we have no userId so take no action
+      return (<div></div>);
 
-    );
+    }
 
   }
 
