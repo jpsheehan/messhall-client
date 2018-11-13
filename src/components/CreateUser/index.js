@@ -10,6 +10,7 @@ import {
   FormControl,
   Button,
   Grid,
+  LinearProgress,
 } from '@material-ui/core';
 
 import {
@@ -39,6 +40,7 @@ class CreateUser extends Component {
       email: '',
       password: '',
       passwordRepeat: '',
+      loading: false,
     };
 
   }
@@ -58,19 +60,33 @@ class CreateUser extends Component {
 
     } else {
 
+      if (this.state.loading === false) {
+
+        this.setState({loading: true});
+
+      }
+
       // the passwords match, create the user and refetch the user list
       this.props.createUserMutation({
-        variables: this.state,
+        variables: {
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          role: this.state.role,
+          email: this.state.email,
+          password: this.state.password,
+        },
         refetchQueries: [{
           query: getUsersQuery,
         }],
       }).then((user) => {
 
+        // close the dialog
         this.props.callback(user);
 
       }).catch((err) => {
 
-        alert('error');
+        this.setState({loading: false});
+        alert('error, see console for details');
         console.log(err);
 
       });
@@ -117,7 +133,7 @@ class CreateUser extends Component {
               onChange={(e) => this.setState({lastName: e.target.value})}
               disabled={this.state.loading} />
 
-            <FormControl>
+            <FormControl disabled={this.state.loading}>
               <InputLabel htmlFor="create-user-role">Role</InputLabel>
               <Select
                 value={this.state.role}
@@ -158,7 +174,7 @@ class CreateUser extends Component {
               disabled={this.state.loading} />
 
             <Grid container
-              style={{marginTop: '1em'}}
+              style={{marginTop: '1em', marginBottom: '1em'}}
               direction='row'
               justify='flex-end'>
               <Grid item>
@@ -175,6 +191,8 @@ class CreateUser extends Component {
                 </Button>
               </Grid>
             </Grid>
+
+            {this.state.loading && <LinearProgress color='primary' />}
           </form>
         </div>
       </div>
