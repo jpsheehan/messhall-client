@@ -19,6 +19,7 @@ window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 // setup the GraphQL endpoint
 const httpLink = createHttpLink({
   uri: 'http://127.0.0.1:3000/graphql',
+  // uri: 'https://messhall.azurewebsites.net/graphql',
 });
 
 // setup the authorization header
