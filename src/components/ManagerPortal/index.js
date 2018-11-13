@@ -27,7 +27,7 @@ class ManagerPortal extends Component {
       <div id='manager-portal'>
         <Grid container direciton='column' justify='center' spacing={0}>
           <Grid item class='center'>
-            <ThumbIcon />
+            <ThumbIcon fontSize='large' />
             <Typography variant='h5'>
               This feature has not yet been implemented!
             </Typography>
