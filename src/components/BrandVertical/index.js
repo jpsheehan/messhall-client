@@ -1,8 +1,8 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import Icon from '@material-ui/core/Icon';
+import FoodIcon from '@material-ui/icons/Fastfood';
 
-import {brandName, brandSlogan} from '../../strings';
+import * as S from '../../strings';
 
 /**
  * The component representing the vertical brand display.
@@ -14,12 +14,12 @@ function BrandVertical(props) {
   return (
     <div>
       <Typography variant='h3' align='center'>
-        <Icon className='md-64'>fastfood</Icon>
+        <FoodIcon fontSize='large' />
         <br />
-        {brandName}
+        {S.brandName}
       </Typography>
       <Typography variant='caption' align='center'>
-        {brandSlogan}
+        {S.brandSlogan}
       </Typography>
     </div>
   );

@@ -2,12 +2,17 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import AppBar from '@material-ui/core/AppBar';
-import IconButton from '@material-ui/core/IconButton';
-import ToolBar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import ExitIcon from '@material-ui/icons/ExitToApp';
-import FoodIcon from '@material-ui/icons/Fastfood';
+import {
+  AppBar,
+  IconButton,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
+
+import {
+  ExitToApp as ExitIcon,
+  Fastfood as FoodIcon,
+} from '@material-ui/icons';
 
 import {deleteTokenMutation} from '../../queries';
 import {isLoggedIn} from '../../utils';
@@ -57,7 +62,7 @@ class NavBar extends Component {
       return (
         <header>
           <AppBar position='static'>
-            <ToolBar className='background-red'>
+            <Toolbar className='background-red'>
               <FoodIcon className='logo' />
               <Typography className='grow' color='inherit' variant='h6'>
                 {S.brandName}
@@ -69,7 +74,7 @@ class NavBar extends Component {
               <IconButton color='inherit' onClick={(e) => this.signOut()}>
                 <ExitIcon color='inherit' />
               </IconButton>
-            </ToolBar>
+            </Toolbar>
           </AppBar>
         </header>
       );

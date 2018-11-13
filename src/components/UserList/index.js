@@ -2,12 +2,17 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql} from 'react-apollo';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import ErrorIcon from '@material-ui/icons/Error';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  LinearProgress,
+} from '@material-ui/core';
+
+import {
+  Error as ErrorIcon,
+} from '@material-ui/icons';
 
 import {getUsersQuery} from '../../queries';
 import * as S from '../../strings';

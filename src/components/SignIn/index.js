@@ -2,12 +2,17 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
 
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import {
+  Button,
+  TextField,
+  Grid,
+  Paper,
+  LinearProgress,
+} from '@material-ui/core';
+
+import {
+  Person as PersonIcon,
+} from '@material-ui/icons';
 
 import {createTokenMutation} from '../../queries';
 import BrandVertical from '../BrandVertical';
@@ -176,7 +181,7 @@ class SignIn extends Component {
                       variant='outlined'
                       disabled={this.state.loading}>
                       {S.buttonSignIn}
-                      <Icon>person</Icon>
+                      <PersonIcon />
                     </Button>
                   </Grid>
 

@@ -2,18 +2,23 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import BookIcon from '@material-ui/icons/Book';
-import ErrorIcon from '@material-ui/icons/Error';
-import EditIcon from '@material-ui/icons/Edit';
+import {
+  LinearProgress,
+  Typography,
+  Button,
+  Grid,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  ListSubheader,
+} from '@material-ui/core';
+
+import {
+  Book as BookIcon,
+  Error as ErrorIcon,
+  Edit as EditIcon,
+} from '@material-ui/icons';
 
 import {getUserDetailsQuery} from '../../queries';
 import * as S from '../../strings';

@@ -2,13 +2,18 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
 
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import {
+  Button,
+  Typography,
+  TextField,
+  Grid,
+  Paper,
+  LinearProgress,
+} from '@material-ui/core';
+
+import {
+  Lock as LockIcon,
+} from '@material-ui/icons';
 
 import BrandVertical from '../BrandVertical';
 import {createPasswordResetMutation} from '../../queries';
@@ -158,7 +163,7 @@ class ForgotPassword extends Component {
                       variant='outlined'
                       disabled={this.state.loading && !this.state.sent}>
                       Reset
-                      <Icon>lock</Icon>
+                      <LockIcon />
                     </Button>
                   </Grid>
 
