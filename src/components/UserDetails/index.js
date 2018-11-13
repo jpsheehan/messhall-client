@@ -219,8 +219,6 @@ class UserDetails extends Component {
    */
   render() {
 
-    console.log(this.props);
-
     if (this.props.userId) {
 
       // we have a userId so we can show the loading and user details
