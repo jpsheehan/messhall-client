@@ -113,7 +113,7 @@ class CreateUser extends Component {
 
     return (
 
-      <div id='create-user'>
+      <div id='create-user' className='spacing'>
         <div>
           <form onSubmit={this.submitForm.bind(this)}>
 
@@ -178,15 +178,24 @@ class CreateUser extends Component {
               direction='row'
               justify='flex-end'>
               <Grid item>
-                <Button type='submit' variant='outlined'>
+                <Button
+                  type='submit'
+                  variant='outlined'
+                  disabled={this.state.loading}>
                   Create User
                   <SendIcon />
                 </Button>
               </Grid>
               <Grid item>
-                <Button type='reset' onClick={
-                  (ev) => this.handleResetClick(ev)
-                }>
+                <span style={{marginLeft: 20}}></span>
+              </Grid>
+              <Grid item>
+                <Button
+                  type='reset'
+                  onClick={
+                    (ev) => this.handleResetClick(ev)
+                  }
+                  disabled={this.state.loading}>
                   Cancel
                 </Button>
               </Grid>
