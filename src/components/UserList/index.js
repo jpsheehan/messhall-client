@@ -8,6 +8,7 @@ import {
   ListItemText,
   ListItemIcon,
   LinearProgress,
+  TextField,
 } from '@material-ui/core';
 
 import {
@@ -32,6 +33,7 @@ class UserList extends Component {
     this.state = {
       selectedIndex: -1,
       loading: false,
+      searchTerm: [],
     };
 
   }
@@ -69,7 +71,32 @@ class UserList extends Component {
       if (data.users) {
 
         // data was loaded ok
-        return data.users.map((user, index) => {
+        return data.users.filter((user) => {
+
+          // use the search term to filter out users
+          if (!this.state.searchTerm) {
+
+            // if there is no search term, then we want all data
+            return true;
+
+          } else {
+
+            if (
+              user.name.toLowerCase().indexOf(this.state.searchTerm) > -1 ||
+              this.state.searchTerm === user.id.toString().toLowerCase()
+            ) {
+
+              return true;
+
+            } else {
+
+              return false;
+
+            }
+
+          }
+
+        }).map((user, index) => {
 
           return (
             <ListItem
@@ -115,6 +142,17 @@ class UserList extends Component {
   }
 
   /**
+   * Handles what happens when the search bar value changes.
+   * @param {Event} event
+   */
+  handleSearchChange(event) {
+
+    const term = event.target.value.toLowerCase();
+    this.setState({searchTerm: term});
+
+  }
+
+  /**
    * Renders the component.
    * @return {*}
    */
@@ -124,6 +162,17 @@ class UserList extends Component {
       <div>
         {this.state.loading && <LinearProgress color='primary' />}
         <List component='nav'>
+          <ListItem>
+            <TextField
+              id='user-list-search'
+              label='Search users...'
+              type='search'
+              margin='normal'
+              fullWidth
+              disabled={this.state.loading}
+              autoFocus
+              onChange={(ev) => this.handleSearchChange(ev)} />
+          </ListItem>
           {this.renderListItems()}
         </List>
       </div>
