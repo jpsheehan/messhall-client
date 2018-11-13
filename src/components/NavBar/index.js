@@ -7,6 +7,8 @@ import {
   IconButton,
   Toolbar,
   Typography,
+  Dialog,
+  CircularProgress,
 } from '@material-ui/core';
 
 import {
@@ -27,9 +29,24 @@ import './style.css';
 class NavBar extends Component {
 
   /**
+   * Creates a new instance of NavBar.
+   * @param {Object} props
+   */
+  constructor(props) {
+
+    super(props);
+    this.state = {
+      loading: false,
+    };
+
+  }
+
+  /**
    * Signs the user out.
    */
   signOut() {
+
+    this.setState({loading: true});
 
     this.props.deleteTokenMutation({
       variables: {
@@ -45,6 +62,10 @@ class NavBar extends Component {
 
       alert(err);
       console.log(err);
+
+    }).finally(() => {
+
+      this.setState({loading: false});
 
     });
 
@@ -76,6 +97,12 @@ class NavBar extends Component {
               </IconButton>
             </Toolbar>
           </AppBar>
+          <Dialog
+            disableBackdropClick={true}
+            disableEscapeKeyDown={true}
+            open={this.state.loading}>
+            <CircularProgress color='primary' className='spacing' />
+          </Dialog>
         </header>
       );
 
