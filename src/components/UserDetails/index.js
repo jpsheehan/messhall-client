@@ -21,6 +21,7 @@ import {
   Edit as EditIcon,
 } from '@material-ui/icons';
 
+import DeleteUserDialog from '../DeleteUserDialog';
 import {getUserDetailsQuery} from '../../queries';
 import * as S from '../../strings';
 import './style.css';
@@ -39,7 +40,26 @@ class UserDetails extends Component {
     super(props);
     this.state = {
       loading: false,
+      deleteUserDialogOpened: false,
     };
+
+  }
+
+  /**
+   * Handles the delete user button click.
+   */
+  handleDeleteClick() {
+
+    this.setState({deleteUserDialogOpened: true});
+
+  }
+
+  /**
+   * Handles the delete user dialog closing.
+   */
+  handleDeleteUserDialogClose() {
+
+    this.setState({deleteUserDialogOpened: false});
 
   }
 
@@ -100,9 +120,11 @@ class UserDetails extends Component {
                     <EditIcon />
                   </Button>
                   <span className='space-right'></span>
-                  <Button variant='outlined' disabled>
-                    Manage Bookings
-                    <BookIcon />
+                  <Button
+                    variant='outlined'
+                    color='secondary'
+                    onClick={() => this.handleDeleteClick()}>
+                    Delete
                   </Button>
                 </Grid>
               </Grid>
@@ -160,6 +182,11 @@ class UserDetails extends Component {
               <Divider />
             </div>
 
+            <Button variant='outlined' disabled>
+              Manage Bookings
+              <BookIcon />
+            </Button>
+
             <List component='nav'>
               <li>
                 <ul>
@@ -184,6 +211,10 @@ class UserDetails extends Component {
                 </ul>
               </li>
             </List>
+            <DeleteUserDialog
+              user={user}
+              onClose={() => this.handleDeleteUserDialogClose()}
+              open={this.state.deleteUserDialogOpened} />
           </div>
 
         );

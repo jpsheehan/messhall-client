@@ -112,9 +112,23 @@ const createPasswordResetMutation = gql`
 
 // `;
 
+const deleteUserMutation = gql`
+
+  mutation ($id: Int!) {
+
+    deleteUser(input: {id: $id}) {
+      user {
+        id
+      }
+    }
+
+  }
+`;
+
 export {
   getUsersQuery, createUserMutation, getUserDetailsQuery,
   createTokenMutation, deleteTokenMutation,
   createPasswordResetMutation,
+  deleteUserMutation,
   // getFacilityDetailsQuery,
 };

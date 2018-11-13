@@ -73,7 +73,7 @@ class UserList extends Component {
 
       }
 
-      if (data.users) {
+      if (data.users && data.users.length > 0) {
 
         // data was loaded ok
         return data.users.filter((user) => {
@@ -160,6 +160,11 @@ class UserList extends Component {
       if (this.state.loading === false) {
 
         this.setState({loading: true});
+        return (
+          <TableRow>
+            <TableCell colSpan={4}></TableCell>
+          </TableRow>
+        );
 
       }
 
