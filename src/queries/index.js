@@ -104,8 +104,17 @@ const createPasswordResetMutation = gql`
 
 `;
 
+// const getFacilityDetailsQuery = gql`
+
+//   {
+
+//   }
+
+// `;
+
 export {
   getUsersQuery, createUserMutation, getUserDetailsQuery,
   createTokenMutation, deleteTokenMutation,
   createPasswordResetMutation,
+  // getFacilityDetailsQuery,
 };
