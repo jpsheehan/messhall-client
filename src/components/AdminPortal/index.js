@@ -1,7 +1,17 @@
 import React, {Component} from 'react';
 
+import {
+  Button,
+  Grid,
+} from '@material-ui/core';
+
+import {
+  Add as AddIcon,
+} from '@material-ui/icons';
+
 import UserList from '../UserList';
 import UserDetails from '../UserDetails';
+import './style.css';
 
 /**
  * Provides the user interface for the AdminPortal.
@@ -40,27 +50,22 @@ class AdminPortal extends Component {
     return (
 
       <div id='admin-portal'>
-
-        <div className='row'>
-
-          <div className="col s4">
-            <button
-              className="btn waves-effect waves-light white-text grey darken-2">
-              New User
-              <i className="material-icons right">add</i>
-            </button>
-
-            <input type="text" placeholder='Search by name or user #' />
-
-            <UserList callback={(id) => this.changeSelectedUser(id)}/>
-          </div>
-
-          <div className="col s8">
+        <Grid container direction='row'>
+          <Grid item container xs={4} direction='column'>
+            <Grid item>
+              <Button>
+                New User
+                <AddIcon />
+              </Button>
+            </Grid>
+            <Grid item>
+              <UserList callback={(id) => this.changeSelectedUser(id)}/>
+            </Grid>
+          </Grid>
+          <Grid item xs={8}>
             <UserDetails userId={this.state.selected} />
-          </div>
-
-        </div>
-
+          </Grid>
+        </Grid>
       </div>
 
     );
