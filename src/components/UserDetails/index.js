@@ -123,6 +123,9 @@ class UserDetails extends Component {
                   <Button
                     variant='outlined'
                     color='secondary'
+                    disabled={
+                      parseInt(localStorage.getItem('user_id')) === user.id
+                    }
                     onClick={() => this.handleDeleteClick()}>
                     Delete
                   </Button>
