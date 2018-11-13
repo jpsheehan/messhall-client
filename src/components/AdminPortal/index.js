@@ -5,6 +5,7 @@ import {
   Grid,
   Dialog,
   DialogTitle,
+  Paper,
 } from '@material-ui/core';
 
 import {
@@ -79,19 +80,21 @@ class AdminPortal extends Component {
     return (
 
       <div id='admin-portal'>
-        <Grid container direction='row'>
+        <Grid container direction='row' justify='space-between'>
           <Grid item container xs={4} direction='column'>
             <Grid item>
-              <Button onClick={(ev) => this.handleCreateUserButtonClick(ev)}>
-                New User
-                <AddIcon />
-              </Button>
+              <Paper style={{margin: '1em', padding: '1em'}}>
+                <Button onClick={(ev) => this.handleCreateUserButtonClick(ev)}>
+                  New User
+                  <AddIcon />
+                </Button>
+              </Paper>
             </Grid>
             <Grid item>
               <UserList callback={(id) => this.changeSelectedUser(id)}/>
             </Grid>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <UserDetails userId={this.state.selected} />
           </Grid>
         </Grid>

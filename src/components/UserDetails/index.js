@@ -86,7 +86,7 @@ class UserDetails extends Component {
         });
 
         return (
-          <Paper id='user-details'>
+          <div>
             <Grid container direction='column'>
               <Grid item container direction='row' justify='space-between'>
                 <Grid item>
@@ -184,7 +184,7 @@ class UserDetails extends Component {
                 </ul>
               </li>
             </List>
-          </Paper>
+          </div>
 
         );
 
@@ -237,10 +237,10 @@ class UserDetails extends Component {
 
       // we have a userId so we can show the loading and user details
       return (
-        <div id='user-details'>
+        <Paper id='user-details'>
           {this.state.loading && <LinearProgress color='primary' />}
           {this.displayUserDetails()}
-        </div>
+        </Paper>
       );
 
     } else {

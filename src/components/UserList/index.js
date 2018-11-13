@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import {graphql} from 'react-apollo';
 
 import {
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
+  Grid,
+  Table,
+  TableRow,
+  TableCell,
+  TableBody,
+  TableHead,
   LinearProgress,
   TextField,
+  Typography,
+  Paper,
 } from '@material-ui/core';
 
 import {
@@ -17,6 +21,7 @@ import {
 
 import {getUsersQuery} from '../../queries';
 import * as S from '../../strings';
+import './style.css';
 
 /**
  * Displays a list of registered users
@@ -98,16 +103,37 @@ class UserList extends Component {
 
         }).map((user, index) => {
 
+          const numCurrentBookings = user.history.reduce((sum, booking) => {
+
+            const date = new Date(booking.date);
+            return sum
+                + (date >= Date.now() && booking.type === 'attendance' ? 1 : 0);
+
+          }, 0);
+          const numTotalBookings = user.history.reduce((sum, booking) => {
+
+            return sum + (booking.type === 'attendance' ? 1 : 0);
+
+          }, 0);
+
           return (
-            <ListItem
-              button
+            <TableRow
               key={index}
               selected={this.state.selectedIndex === index}
               onClick={(ev) => this.handleListItemClick(ev, index, user)}>
-              <ListItemText>
-                {user.name} ({user.id})
-              </ListItemText>
-            </ListItem>
+              <TableCell>
+                {user.name}
+              </TableCell>
+              <TableCell>
+                {user.id}
+              </TableCell>
+              <TableCell>
+                {numCurrentBookings}
+              </TableCell>
+              <TableCell>
+                {numTotalBookings}
+              </TableCell>
+            </TableRow>
           );
 
         });
@@ -116,14 +142,14 @@ class UserList extends Component {
 
         // data could not load
         return (
-          <ListItem>
-            <ListItemIcon>
+          <TableRow>
+            <TableCell colSpan={4}>
               <ErrorIcon />
-            </ListItemIcon>
-            <ListItemText>
-              {S.userListErrorLoading}
-            </ListItemText>
-          </ListItem>
+              <Typography>
+                {S.userListErrorLoading}
+              </Typography>
+            </TableCell>
+          </TableRow>
         );
 
       }
@@ -159,23 +185,47 @@ class UserList extends Component {
   render() {
 
     return (
-      <div>
-        {this.state.loading && <LinearProgress color='primary' />}
-        <List component='nav'>
-          <ListItem>
-            <TextField
-              id='user-list-search'
-              label='Search users...'
-              type='search'
-              margin='normal'
-              fullWidth
-              disabled={this.state.loading}
-              autoFocus
-              onChange={(ev) => this.handleSearchChange(ev)} />
-          </ListItem>
-          {this.renderListItems()}
-        </List>
-      </div>
+      <Paper id='user-list'>
+        <Grid container direction='column'>
+          <Grid item>
+            {this.state.loading && <LinearProgress color='primary' />}
+          </Grid>
+          <Grid item>
+            <form onSubmit={(ev) => this.handleSearchChange(ev)}>
+              <TextField
+                id='user-list-search'
+                label='Search users...'
+                type='search'
+                fullWidth
+                margin='dense'
+                disabled={this.state.loading}
+                autoFocus />
+            </form>
+          </Grid>
+        </Grid>
+
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                Name
+              </TableCell>
+              <TableCell>
+                ID
+              </TableCell>
+              <TableCell>
+                Current Bookings
+              </TableCell>
+              <TableCell>
+                Total Bookings
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.renderListItems()}
+          </TableBody>
+        </Table>
+      </Paper>
     );
 
   }

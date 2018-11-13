@@ -23,3 +23,8 @@ input:focus:not([read-only]) {
 .background-red {
   background-color: #c62828;
 }
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
