@@ -40,6 +40,7 @@ class UserDetails extends Component {
     super(props);
     this.state = {
       loading: false,
+      deletedId: -1,
       deleteUserDialogOpened: false,
     };
 
@@ -56,10 +57,21 @@ class UserDetails extends Component {
 
   /**
    * Handles the delete user dialog closing.
+   * @param {Boolean} deleted True if the current user was deleted.
    */
-  handleDeleteUserDialogClose() {
+  handleDeleteUserDialogClose(deleted) {
 
-    this.setState({deleteUserDialogOpened: false});
+    this.setState({
+      deleteUserDialogOpened: false,
+    });
+
+    if (deleted) {
+
+      this.setState({
+        deletedId: this.props.userId,
+      });
+
+    }
 
   }
 
@@ -216,7 +228,7 @@ class UserDetails extends Component {
             </List>
             <DeleteUserDialog
               user={user}
-              onClose={() => this.handleDeleteUserDialogClose()}
+              onClose={(deleted) => this.handleDeleteUserDialogClose(deleted)}
               open={this.state.deleteUserDialogOpened} />
           </div>
 
@@ -267,7 +279,7 @@ class UserDetails extends Component {
    */
   render() {
 
-    if (this.props.userId) {
+    if (this.props.userId && this.props.userId !== this.state.deletedId) {
 
       // we have a userId so we can show the loading and user details
       return (

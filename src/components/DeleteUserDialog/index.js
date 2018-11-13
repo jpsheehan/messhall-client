@@ -46,16 +46,16 @@ class DeleteUserDialog extends Component {
       variables: {
         id: this.props.user.id,
       },
-      refetchQueries: {
+      refetchQueries: [{
         query: getUsersQuery,
-      },
+      }],
     }).then((user) => {
 
       this.handleClose(true);
 
     }).catch((err) => {
 
-      this.alert('An error occurred.');
+      alert('An error occurred.');
       console.error(err);
 
     }).finally(() => {
