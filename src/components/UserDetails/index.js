@@ -12,6 +12,7 @@ import {
   ListItem,
   ListItemText,
   ListSubheader,
+  Divider,
 } from '@material-ui/core';
 
 import {
@@ -93,23 +94,23 @@ class UserDetails extends Component {
                     {user.lastName}, {user.firstName}
                   </Typography>
                 </Grid>
-                <Grid item container direction='row' justify='flex-end'>
-                  <Grid item>
-                    <Button variant='contained'>
-                      Edit
-                      <EditIcon />
-                    </Button>
-                  </Grid>
-                  <Grid item><span className='space-right'></span></Grid>
-                  <Grid item>
-                    <Button variant='contained'>
-                      Manage Bookings
-                      <BookIcon />
-                    </Button>
-                  </Grid>
+                <Grid item>
+                  <Button variant='outlined'>
+                    Edit
+                    <EditIcon />
+                  </Button>
+                  <span className='space-right'></span>
+                  <Button variant='outlined'>
+                    Manage Bookings
+                    <BookIcon />
+                  </Button>
                 </Grid>
               </Grid>
-              <Grid item xs={12}><div className='margin-1em'></div></Grid>
+              <Grid item xs={12}>
+                <div className='margin-1em'>
+                  <Divider />
+                </div>
+              </Grid>
               <Grid item container
                 justify='space-evenly' direction='row' className='center'>
                 <Grid item>
@@ -143,8 +144,21 @@ class UserDetails extends Component {
                     <a href={'mailto:' + user.email}>{user.email}</a>
                   </Typography>
                 </Grid>
+                <Grid item>
+                  <Typography variant='h6'>
+                    Account Type:
+                  </Typography>
+                  <br />
+                  <Typography>
+                    {user.role[0].toUpperCase() + user.role.substr(1)}
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
+
+            <div className='margin-1em'>
+              <Divider />
+            </div>
 
             <List component='nav'>
               <li>
