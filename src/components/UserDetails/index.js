@@ -95,12 +95,12 @@ class UserDetails extends Component {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Button variant='outlined'>
+                  <Button variant='outlined' disabled>
                     Edit
                     <EditIcon />
                   </Button>
                   <span className='space-right'></span>
-                  <Button variant='outlined'>
+                  <Button variant='outlined' disabled>
                     Manage Bookings
                     <BookIcon />
                   </Button>
