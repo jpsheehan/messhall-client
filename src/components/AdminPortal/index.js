@@ -42,7 +42,6 @@ class AdminPortal extends Component {
    */
   handleCreateUserDialogClose(user) {
 
-    console.log('closing dialog');
     if (this.state.createUserDialogShown === true) {
 
       this.setState({createUserDialogShown: false});
