@@ -15,7 +15,7 @@ import {
   Paper,
 } from '@material-ui/core';
 
-// import PremadeSnackbar from '../PremadeSnackbar';
+import {showSnackbar} from '../../actions';
 import {userSearchQuery} from '../../queries';
 import './style.css';
 
@@ -88,16 +88,7 @@ class UserList extends Component {
             error: true,
           });
 
-          // this.props.
-          const snackbar = {
-            message: error.toString(),
-            variant: 'error',
-          };
-
-          this.props.dispatch({
-            type: 'SHOW_SNACKBAR',
-            payload: {snackbar},
-          });
+          this.props.showSnackbar(error.toString(), 'error');
 
         }
 
@@ -241,7 +232,11 @@ class UserList extends Component {
 
 UserList.propTypes = {
   callback: PropTypes.func,
-  dispatch: PropTypes.func,
+  showSnackbar: PropTypes.func,
 };
 
-export default connect()(UserList);
+const mapDispatchToProps = {
+  showSnackbar,
+};
+
+export default connect(null, mapDispatchToProps)(UserList);

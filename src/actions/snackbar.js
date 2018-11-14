@@ -1,5 +1,5 @@
 export const showSnackbar = (message, variant) => ({
-  type: 'ADD_SNACKBAR',
+  type: 'SHOW_SNACKBAR',
   payload: {
     snackbar: {
       message,

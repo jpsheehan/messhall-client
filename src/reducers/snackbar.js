@@ -11,7 +11,7 @@ const snackbar = (state = {}, action) => {
 
     case 'HIDE_SNACKBAR':
       return {
-        ...state.snackbar,
+        ...state,
         open: false,
       };
 
