@@ -14,7 +14,7 @@ import SignIn from './components/SignIn';
 import ManagerPortal from './components/ManagerPortal';
 import AdminPortal from './components/AdminPortal';
 import ForgotPassword from './components/ForgotPassword';
-import SnackbarProvider from './components/SnackbarProvider';
+import SnackbarContainer from './containers/SnackbarContainer';
 
 // use the new material ui typography variants
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
@@ -68,7 +68,7 @@ class App extends Component {
                 <Route path="/manager" component={ManagerPortal} />
                 <Route path='/forgot-password' component={ForgotPassword} />
               </Switch>
-              <SnackbarProvider />
+              <SnackbarContainer />
             </div>
           </BrowserRouter>
         </Provider>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {hideSnackbar} from '../../actions';
 
-import PremadeSnackbar from '../PremadeSnackbar';
+import PremadeSnackbar from '../../components/PremadeSnackbar';
 
 /**
  * Provides methods for showing PremadeSnackbar components.
