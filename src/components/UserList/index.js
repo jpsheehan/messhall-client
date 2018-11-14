@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Query} from 'react-apollo';
+import {connect} from 'react-redux';
 
 import {
   Grid,
@@ -14,6 +15,7 @@ import {
   Paper,
 } from '@material-ui/core';
 
+// import PremadeSnackbar from '../PremadeSnackbar';
 import {userSearchQuery} from '../../queries';
 import './style.css';
 
@@ -80,7 +82,22 @@ class UserList extends Component {
 
         if (this.state.error === false) {
 
-          this.setState({error: true});
+          // this is a guard so we don't keep firing new snackbars when
+          // other state is updated.
+          this.setState({
+            error: true,
+          });
+
+          // this.props.
+          const snackbar = {
+            message: error.toString(),
+            variant: 'error',
+          };
+
+          this.props.dispatch({
+            type: 'SHOW_SNACKBAR',
+            payload: {snackbar},
+          });
 
         }
 
@@ -88,7 +105,9 @@ class UserList extends Component {
 
         if (this.state.error === true) {
 
-          this.setState({error: false});
+          this.setState({
+            error: false,
+          });
 
         }
 
@@ -143,7 +162,7 @@ class UserList extends Component {
    * Handles what happens when the search bar value changes.
    * @param {Event} event
    */
-  handleSearchChange(event) {
+  handleSearchSubmit(event) {
 
     event.preventDefault();
 
@@ -154,6 +173,7 @@ class UserList extends Component {
     this.setState({
       selectedIndex: -1,
       searchTerm,
+      error: false,
     });
 
   }
@@ -171,7 +191,7 @@ class UserList extends Component {
             {this.state.loading && <LinearProgress color='primary' />}
           </Grid>
           <Grid item>
-            <form onSubmit={(ev) => this.handleSearchChange(ev)}>
+            <form onSubmit={(ev) => this.handleSearchSubmit(ev)}>
               <TextField
                 id='user-list-search'
                 label='Search users...'
@@ -221,6 +241,7 @@ class UserList extends Component {
 
 UserList.propTypes = {
   callback: PropTypes.func,
+  dispatch: PropTypes.func,
 };
 
-export default UserList;
+export default connect()(UserList);

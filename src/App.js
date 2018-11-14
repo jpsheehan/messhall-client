@@ -1,17 +1,20 @@
 import React, {Component} from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Provider} from 'react-redux';
 import ApolloClient from 'apollo-client';
 import {ApolloProvider} from 'react-apollo';
 import {createHttpLink} from 'apollo-link-http';
 import {setContext} from 'apollo-link-context';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 
+import {store} from './Store';
 import Landing from './components/Landing';
 import NavBar from './components/NavBar';
 import SignIn from './components/SignIn';
 import ManagerPortal from './components/ManagerPortal';
 import AdminPortal from './components/AdminPortal';
 import ForgotPassword from './components/ForgotPassword';
+import SnackbarProvider from './components/SnackbarProvider';
 
 // use the new material ui typography variants
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
@@ -54,18 +57,21 @@ class App extends Component {
 
     return (
       <ApolloProvider client={client}>
-        <BrowserRouter>
-          <div id="main">
-            <Route path="/" component={NavBar} />
-            <Switch>
-              <Route exact path="/" component={Landing} />
-              <Route path="/sign-in" component={SignIn} />
-              <Route path="/admin" component={AdminPortal} />
-              <Route path="/manager" component={ManagerPortal} />
-              <Route path='/forgot-password' component={ForgotPassword} />
-            </Switch>
-          </div>
-        </BrowserRouter>
+        <Provider store={store}>
+          <BrowserRouter>
+            <div id="main">
+              <Route path="/" component={NavBar} />
+              <Switch>
+                <Route exact path="/" component={Landing} />
+                <Route path="/sign-in" component={SignIn} />
+                <Route path="/admin" component={AdminPortal} />
+                <Route path="/manager" component={ManagerPortal} />
+                <Route path='/forgot-password' component={ForgotPassword} />
+              </Switch>
+              <SnackbarProvider />
+            </div>
+          </BrowserRouter>
+        </Provider>
       </ApolloProvider>
     );
 
