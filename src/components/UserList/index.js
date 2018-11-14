@@ -11,16 +11,10 @@ import {
   TableHead,
   LinearProgress,
   TextField,
-  Typography,
   Paper,
 } from '@material-ui/core';
 
-import {
-  Error as ErrorIcon,
-} from '@material-ui/icons';
-
 import {userSearchQuery} from '../../queries';
-import * as S from '../../strings';
 import './style.css';
 
 /**
