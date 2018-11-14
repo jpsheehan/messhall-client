@@ -43,16 +43,6 @@ const variantColors = {
 class PremadeSnackbar extends Component {
 
   /**
-  * Creates a new PremadeSnackbar
-  * @param {Object} props
-  */
-  constructor(props) {
-
-    super(props);
-
-  }
-
-  /**
    * Renders the component.
    * @return {JSX}
    */
@@ -99,7 +89,11 @@ class PremadeSnackbar extends Component {
 PremadeSnackbar.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+  variant: PropTypes.oneOf([
+    'success',
+    'warning',
+    'error',
+    'info']).isRequired,
   message: PropTypes.string.isRequired,
   autoHideDuration: PropTypes.number,
 };

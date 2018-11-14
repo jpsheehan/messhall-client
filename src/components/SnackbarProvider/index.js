@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {hideSnackbar} from '../../actions';
 
 import PremadeSnackbar from '../PremadeSnackbar';
 
@@ -15,63 +16,53 @@ class SnackbarProvider extends Component {
    */
   render() {
 
-    return this.props.snackbars.map((snackbar, index) => {
+    const {snackbar} = this.props;
+
+    if (snackbar) {
 
       return (
         <PremadeSnackbar
-          open={this.props.snackbars[index].open}
-          key={index}
+          open={snackbar.open}
           message={snackbar.message}
           variant={snackbar.variant}
-          autoHideDuration={null}
-          onClose={() => this.handleSnackbarClose(index)} />
+          onClose={() => this.handleSnackbarClose()} />
       );
 
-    });
+    } else {
+
+      return (<div></div>);
+
+    }
 
   }
 
-  // /**
-  //  * Testing
-  //  * @param {Object} nextProps
-  //  * @return {Boolean}
-  //  */
-  // shouldComponentUpdate(nextProps) {
-
-  //   console.log(nextProps.snackbars.length, this.props.snackbars.length);
-
-  //   return (nextProps.snackbars.length !== this.props.snackbars.length);
-
-  // }
-
   /**
    * Called when a Snackbar is closed.
-   * @param {Number} index The index of the snackbar to close
    */
-  handleSnackbarClose(index) {
+  handleSnackbarClose() {
 
     // dispatch a CLOSE action to the redux store
-    this.props.dispatch({
-      type: 'HIDE_SNACKBAR',
-      payload: {index},
-    });
+    this.props.hideSnackbar();
 
   }
 
 }
 
 SnackbarProvider.propTypes = {
-  snackbars: PropTypes.array,
-  children: PropTypes.node,
-  dispatch: PropTypes.func,
+  snackbar: PropTypes.object,
+  hideSnackbar: PropTypes.func,
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
 
   return {
-    snackbars: state.snackbars,
+    snackbar: state.snackbar,
   };
 
 };
 
-export default connect(mapStateToProps)(SnackbarProvider);
+const mapDispatchToProps = {
+  hideSnackbar,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SnackbarProvider);
