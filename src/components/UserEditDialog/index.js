@@ -22,7 +22,7 @@ import {
 
 import {
   editUserMutation,
-  getUsersQuery,
+  userSearchQuery,
   getUserDetailsQuery,
 } from '../../queries';
 import * as S from '../../strings';
@@ -127,7 +127,7 @@ class UserEditDialog extends Component {
           patch,
         },
         refetchQueries: [{
-          query: getUsersQuery,
+          query: userSearchQuery,
         },
         {
           query: getUserDetailsQuery,

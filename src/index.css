@@ -33,3 +33,7 @@ body {
   margin: 1em;
   padding: 1em;
 }
+
+.center {
+  text-align: center;
+}

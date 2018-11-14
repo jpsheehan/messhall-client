@@ -155,8 +155,25 @@ const editUserMutation = gql`
 
 `;
 
+const userSearchQuery = gql`
+
+  query($nameOrId: String) {
+    userSearch(nameOrId: $nameOrId) {
+      id
+      name
+      email
+      role
+      history {
+        date
+        type
+      }
+    }
+  }
+
+`;
+
 export {
-  getUsersQuery, createUserMutation, getUserDetailsQuery,
+  getUsersQuery, createUserMutation, getUserDetailsQuery, userSearchQuery,
   createTokenMutation, deleteTokenMutation,
   createPasswordResetMutation,
   deleteUserMutation, editUserMutation,

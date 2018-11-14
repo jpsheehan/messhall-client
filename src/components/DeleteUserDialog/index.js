@@ -14,7 +14,7 @@ import {
 
 import {
   deleteUserMutation,
-  getUsersQuery,
+  userSearchQuery,
 } from '../../queries';
 
 /**
@@ -47,7 +47,7 @@ class DeleteUserDialog extends Component {
         id: this.props.user.id,
       },
       refetchQueries: [{
-        query: getUsersQuery,
+        query: userSearchQuery,
       }],
     }).then((user) => {
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {graphql} from 'react-apollo';
+import {Query} from 'react-apollo';
 
 import {
   Grid,
@@ -19,7 +19,7 @@ import {
   Error as ErrorIcon,
 } from '@material-ui/icons';
 
-import {getUsersQuery} from '../../queries';
+import {userSearchQuery} from '../../queries';
 import * as S from '../../strings';
 import './style.css';
 
@@ -38,7 +38,8 @@ class UserList extends Component {
     this.state = {
       selectedIndex: -1,
       loading: false,
-      searchTerm: [],
+      error: false,
+      searchTerm: '',
     };
 
   }
@@ -58,50 +59,48 @@ class UserList extends Component {
 
   /**
    * Renders the list of users
+   * @param {Boolean} loading
+   * @param {Object} error
+   * @param {Object} data
    * @return {*}
    */
-  renderListItems() {
+  renderTabularData(loading, error, data) {
 
-    const data = this.props.data;
+    if (loading) {
 
-    if (data.loading === false) {
+      if (this.state.loading === false) {
 
-      // data has finished loading and is ready
+        this.setState({loading: true});
+
+      }
+
+    } else {
+
       if (this.state.loading === true) {
 
         this.setState({loading: false});
 
       }
 
-      if (data.users && data.users.length > 0) {
+      if (error) {
 
-        // data was loaded ok
-        return data.users.filter((user) => {
+        if (this.state.error === false) {
 
-          // use the search term to filter out users
-          if (!this.state.searchTerm) {
+          this.setState({error: true});
 
-            // if there is no search term, then we want all data
-            return true;
+        }
 
-          } else {
+      } else {
 
-            if (
-              user.name.toLowerCase().indexOf(this.state.searchTerm) > -1 ||
-              this.state.searchTerm === user.id.toString().toLowerCase()
-            ) {
+        if (this.state.error === true) {
 
-              return true;
+          this.setState({error: false});
 
-            } else {
+        }
 
-              return false;
+        const users = data.userSearch;
 
-            }
-
-          }
-
-        }).map((user, index) => {
+        return users.map((user, index) => {
 
           const numCurrentBookings = user.history.reduce((sum, booking) => {
 
@@ -138,37 +137,11 @@ class UserList extends Component {
 
         });
 
-      } else {
-
-        // data could not load
-        return (
-          <TableRow>
-            <TableCell colSpan={4}>
-              <ErrorIcon />
-              <Typography>
-                {S.userListErrorLoading}
-              </Typography>
-            </TableCell>
-          </TableRow>
-        );
-
-      }
-
-    } else {
-
-      // data is loading
-      if (this.state.loading === false) {
-
-        this.setState({loading: true});
-        return (
-          <TableRow>
-            <TableCell colSpan={4}></TableCell>
-          </TableRow>
-        );
-
       }
 
     }
+
+    return (<div></div>);
 
   }
 
@@ -180,8 +153,14 @@ class UserList extends Component {
 
     event.preventDefault();
 
-    const term = document.querySelector('#user-list-search').value;
-    this.setState({searchTerm: term.toLowerCase()});
+    const searchTerm = document.querySelector('#user-list-search')
+        .value
+        .toLowerCase();
+
+    this.setState({
+      selectedIndex: -1,
+      searchTerm,
+    });
 
   }
 
@@ -229,7 +208,14 @@ class UserList extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.renderListItems()}
+            <Query
+              query={userSearchQuery}
+              variables={{nameOrId: this.state.searchTerm}}>
+              {
+                ({loading, error, data}) =>
+                  this.renderTabularData(loading, error, data)
+              }
+            </Query>
           </TableBody>
         </Table>
       </Paper>
@@ -240,8 +226,7 @@ class UserList extends Component {
 }
 
 UserList.propTypes = {
-  data: PropTypes.object,
   callback: PropTypes.func,
 };
 
-export default graphql(getUsersQuery)(UserList);
+export default UserList;
