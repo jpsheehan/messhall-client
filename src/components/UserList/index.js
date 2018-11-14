@@ -178,8 +178,10 @@ class UserList extends Component {
    */
   handleSearchChange(event) {
 
-    const term = event.target.value.toLowerCase();
-    this.setState({searchTerm: term});
+    event.preventDefault();
+
+    const term = document.querySelector('#user-list-search').value;
+    this.setState({searchTerm: term.toLowerCase()});
 
   }
 
