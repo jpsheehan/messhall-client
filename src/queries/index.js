@@ -125,10 +125,40 @@ const deleteUserMutation = gql`
   }
 `;
 
+const editUserMutation = gql`
+
+  mutation ($id: Int!, $patch: CreateUser!) {
+
+    updateUser(input: {id: $id, patch: $patch}) {
+      user {
+        id
+        name
+        firstName
+        lastName
+        email
+        role
+        points
+        history {
+          id
+          date
+          points
+          type
+          reward {
+            id
+            name
+          }
+        }
+      }
+    }
+
+  }
+
+`;
+
 export {
   getUsersQuery, createUserMutation, getUserDetailsQuery,
   createTokenMutation, deleteTokenMutation,
   createPasswordResetMutation,
-  deleteUserMutation,
+  deleteUserMutation, editUserMutation,
   // getFacilityDetailsQuery,
 };

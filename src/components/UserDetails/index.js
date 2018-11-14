@@ -22,6 +22,7 @@ import {
 } from '@material-ui/icons';
 
 import DeleteUserDialog from '../DeleteUserDialog';
+import UserEditDialog from '../UserEditDialog';
 import {getUserDetailsQuery} from '../../queries';
 import * as S from '../../strings';
 import './style.css';
@@ -41,7 +42,10 @@ class UserDetails extends Component {
     this.state = {
       loading: false,
       deletedId: -1,
+      updatedUser: null,
+      updatedId: -1,
       deleteUserDialogOpened: false,
+      userUpdateDialogOpened: false,
     };
 
   }
@@ -52,6 +56,15 @@ class UserDetails extends Component {
   handleDeleteClick() {
 
     this.setState({deleteUserDialogOpened: true});
+
+  }
+
+  /**
+   * Handles the edit user button click.
+   */
+  handleEditClick() {
+
+    this.setState({userUpdateDialogOpened: true});
 
   }
 
@@ -76,12 +89,38 @@ class UserDetails extends Component {
   }
 
   /**
+   * Handles the user update dialog closing.
+   * @param {Object} user The new User object if the user was updated.
+   */
+  handleUserUpdateDialogClose(user) {
+
+    this.setState({
+      userUpdateDialogOpened: false,
+    });
+
+    if (user) {
+
+      this.setState({
+        updatedUser: user,
+        updatedId: user.id,
+      });
+
+    }
+
+  }
+
+  /**
    * Displays the details about the particular user.
    * @return {*}
    */
   displayUserDetails() {
 
-    const data = this.props.data;
+    // get the user data from the updatedUser if neccessary
+    // otherwise get it from the props
+    const data = this.state.updatedUser &&
+      (this.state.updatedId === this.props.userId)
+        ? {user: this.state.updatedUser}
+        : this.props.data;
 
     if (data.loading) {
 
@@ -127,7 +166,10 @@ class UserDetails extends Component {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Button variant='outlined' disabled>
+                  <Button
+                    color='primary'
+                    variant='outlined'
+                    onClick={() => this.handleEditClick()}>
                     Edit
                     <EditIcon />
                   </Button>
@@ -230,6 +272,10 @@ class UserDetails extends Component {
               user={user}
               onClose={(deleted) => this.handleDeleteUserDialogClose(deleted)}
               open={this.state.deleteUserDialogOpened} />
+            <UserEditDialog
+              user={user}
+              onClose={(updated) => this.handleUserUpdateDialogClose(updated)}
+              open={this.state.userUpdateDialogOpened} />
           </div>
 
         );
@@ -279,7 +325,9 @@ class UserDetails extends Component {
    */
   render() {
 
-    if (this.props.userId && this.props.userId !== this.state.deletedId) {
+    if (this.props.userId &&
+      this.props.userId !== this.state.deletedId &&
+      this.props.userId !== this.state.updatedId) {
 
       // we have a userId so we can show the loading and user details
       return (
