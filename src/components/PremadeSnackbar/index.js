@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -22,6 +22,9 @@ import {
   red,
 } from '@material-ui/core/colors';
 
+// the default timeout in milliseconds
+const DEFAULT_TIMEOUT = 6000;
+
 const variantIcons = {
   success: (<CheckCircleIcon />),
   warning: (<WarningIcon />),
@@ -39,52 +42,46 @@ const variantColors = {
 /**
  * Creates a Snackbar in the bottom left corner of the screen with a
  * specified message and color.
+ * @param {Object} props
+ * @return {JSX}
  */
-class PremadeSnackbar extends Component {
+function PremadeSnackbar(props) {
 
-  /**
-   * Renders the component.
-   * @return {JSX}
-   */
-  render() {
+  const icon = variantIcons[props.variant];
+  const style = {backgroundColor: variantColors[props.variant]};
 
-    const icon = variantIcons[this.props.variant];
-    const style = {backgroundColor: variantColors[this.props.variant]};
+  return (
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      open={props.open}
+      autoHideDuration={props.autoHideDuration || DEFAULT_TIMEOUT}
+      onClose={() => props.onClose()}>
+      <SnackbarContent
+        aria-describedby='client-snackbar'
+        style={style}
+        message={
+          <span
+            id='client-snackbar'
+            style={{display: 'flex', alignItems: 'center'}}>
+            {icon}
+            {props.message}
+          </span>}
+        action={[
+          <IconButton
+            key='close'
+            aria-label='Close'
+            color='inherit'
+            onClick={() => props.onClose()}>
+            <CloseIcon />
+          </IconButton>,
+        ]}/>
+    </Snackbar>
+  );
 
-    return (
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        open={this.props.open}
-        autoHideDuration={this.props.autoHideDuration || 6000}
-        onClose={() => this.props.onClose()}>
-        <SnackbarContent
-          aria-describedby='client-snackbar'
-          style={style}
-          message={
-            <span
-              id='client-snackbar'
-              style={{display: 'flex', alignItems: 'center'}}>
-              {icon}
-              {this.props.message}
-            </span>}
-          action={[
-            <IconButton
-              key='close'
-              aria-label='Close'
-              color='inherit'
-              onClick={() => this.props.onClose()}>
-              <CloseIcon />
-            </IconButton>,
-          ]}/>
-      </Snackbar>
-    );
-
-  }
-
-};
+}
 
 PremadeSnackbar.propTypes = {
   open: PropTypes.bool.isRequired,
