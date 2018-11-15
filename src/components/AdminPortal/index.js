@@ -14,7 +14,7 @@ import {
 
 import UserList from '../UserList';
 import UserDetails from '../UserDetails';
-import CreateUser from '../CreateUser';
+import CreateUser from '../UserCreateDialog';
 import './style.css';
 
 /**

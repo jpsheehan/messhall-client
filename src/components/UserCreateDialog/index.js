@@ -26,7 +26,7 @@ import './style.css';
 /**
  * The component for creating new Users
  */
-class CreateUser extends Component {
+class UserCreateDialog extends Component {
 
   /**
    * Creates a new CreateUser component
@@ -214,7 +214,7 @@ class CreateUser extends Component {
 
 }
 
-CreateUser.propTypes = {
+UserCreateDialog.propTypes = {
   createUserMutation: PropTypes.any,
   callback: PropTypes.func.isRequired,
   showSnackbar: PropTypes.func,
@@ -227,5 +227,5 @@ const mapDispatchToProps = {
 export default connect(null, mapDispatchToProps)(
     compose(
         graphql(createUserMutation, {name: 'createUserMutation'}),
-    )(CreateUser)
+    )(UserCreateDialog)
 );
