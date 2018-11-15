@@ -1,9 +1,10 @@
-export const showSnackbar = (message, variant) => ({
+export const showSnackbar = (message, variant, callback) => ({
   type: 'SHOW_SNACKBAR',
   payload: {
     snackbar: {
       message,
       variant,
+      callback,
     },
   },
 });

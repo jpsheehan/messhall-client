@@ -41,8 +41,17 @@ class SnackbarProvider extends Component {
    */
   handleSnackbarClose() {
 
-    // dispatch a CLOSE action to the redux store
+    const {snackbar} = this.props;
+
+    // dispatch a HIDE_SNACKBAR action to redux
     this.props.hideSnackbar();
+
+    // call the callback if it is valid
+    if (snackbar.callback) {
+
+      snackbar.callback(snackbar.message);
+
+    }
 
   }
 
