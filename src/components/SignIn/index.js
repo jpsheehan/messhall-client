@@ -46,7 +46,7 @@ class SignIn extends Component {
    */
   onForgotPasswordClick(event) {
 
-    this.props.history.push('/forgot-password');
+    this.props.history.push(`/forgot-password?email=${this.state.email}`);
 
   }
 

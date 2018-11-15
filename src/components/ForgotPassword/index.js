@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
 import {connect} from 'react-redux';
+import queryString from 'query-string';
 
 import {
   Button,
@@ -32,9 +33,11 @@ class ForgotPassword extends Component {
    */
   constructor(props) {
 
+    const parts = queryString.parse(props.location.search);
+
     super(props);
     this.state = {
-      email: '',
+      email: parts.email || '',
       loading: false,
       sent: false,
     };
@@ -61,6 +64,18 @@ class ForgotPassword extends Component {
 
     this.setState({loading: true});
 
+    // // useful for testing the case when the email is entered.
+    // (() => {
+
+    //   return new Promise((resolve) => resolve({
+    //     data: {
+    //       createPasswordResetMutation: {
+    //         email: this.state.email,
+    //       },
+    //     }}));
+
+    // })().then(({data}) => {
+
     this.props.createPasswordResetMutation({
       variables: {
         email: this.state.email,
@@ -72,14 +87,10 @@ class ForgotPassword extends Component {
         const email = data.createPasswordResetMutation.email;
 
         this.props.showSnackbar(
-            S.forgotPasswordDialogMessage.replace('$EMAIL', email), 'info');
-
-        // TODO: add this as a callback for when the snackbar closes
-        // () => {
-
-        //   this.props.history.push('/sign-in');
-
-        // };
+            S.forgotPasswordDialogMessage.replace('$EMAIL', email),
+            'info',
+            () => this.props.history.push('/sign-in')
+        );
 
         this.setState({sent: true});
 
@@ -97,7 +108,7 @@ class ForgotPassword extends Component {
       if (msg.indexOf(S.gqlResponseInvalidPermissions) !== -1) {
 
         // users aren't allowed to use this portal!
-        this.props.showSnackbar(S.errors.authorization.message);
+        this.props.showSnackbar(S.errors.authorization.message, 'warning');
 
       } else {
 
@@ -145,11 +156,12 @@ class ForgotPassword extends Component {
                 id='sign-in-email'
                 label='Email'
                 type='email'
+                value={this.state.email}
                 fullWidth
                 autoFocus
                 placeholder={S.placeholderEmail}
                 onChange={(e) => this.setState({email: e.target.value})}
-                disabled={this.state.loading && !this.state.sent} />
+                disabled={this.state.loading || this.state.sent} />
 
               <br />
               <br />
@@ -158,7 +170,7 @@ class ForgotPassword extends Component {
                   <Button
                     type='submit'
                     variant='outlined'
-                    disabled={this.state.loading && !this.state.sent}>
+                    disabled={this.state.loading || this.state.sent}>
                     Reset
                     <LockIcon />
                   </Button>
@@ -187,6 +199,7 @@ class ForgotPassword extends Component {
 ForgotPassword.propTypes = {
   createPasswordResetMutation: PropTypes.any,
   history: PropTypes.any,
+  location: PropTypes.object,
   showSnackbar: PropTypes.func,
 };
 
