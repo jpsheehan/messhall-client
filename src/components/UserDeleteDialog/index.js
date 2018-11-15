@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql} from 'react-apollo';
+import {connect} from 'react-redux';
 
 import {
   Button,
@@ -16,6 +17,7 @@ import {
   deleteUserMutation,
   userSearchQuery,
 } from '../../queries';
+import {showSnackbar} from '../../actions';
 
 /**
  * The DeleteUserDialog allows an admin to remove a user from the system.
@@ -55,7 +57,7 @@ class UserDeleteDialog extends Component {
 
     }).catch((err) => {
 
-      alert('An error occurred.');
+      this.props.showSnackbar(err.toString(), 'error');
       console.error(err);
 
     }).finally(() => {
@@ -73,6 +75,12 @@ class UserDeleteDialog extends Component {
   handleClose(deleted) {
 
     this.props.onClose(deleted || false);
+
+    if (deleted) {
+
+      this.props.showSnackbar('The user has been deleted', 'success');
+
+    }
 
   }
 
@@ -142,8 +150,15 @@ UserDeleteDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   deleteUserMutation: PropTypes.func,
+  showSnackbar: PropTypes.func,
 };
 
-export default graphql(deleteUserMutation, {
-  name: 'deleteUserMutation',
-})(UserDeleteDialog);
+const mapDispatchToProps = {
+  showSnackbar,
+};
+
+export default connect(null, mapDispatchToProps)(
+    graphql(deleteUserMutation, {
+      name: 'deleteUserMutation',
+    })(UserDeleteDialog)
+);
