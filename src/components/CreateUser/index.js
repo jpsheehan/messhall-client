@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
+import {connect} from 'react-redux';
 
 import {
   TextField,
@@ -17,6 +18,7 @@ import {
   Send as SendIcon,
 } from '@material-ui/icons';
 
+import {showSnackbar} from '../../actions';
 import {createUserMutation, getUsersQuery} from '../../queries';
 import * as S from '../../strings';
 import './style.css';
@@ -56,7 +58,7 @@ class CreateUser extends Component {
     if (this.state.password !== this.state.passwordRepeat) {
 
       // the passwords do not match!
-      alert('The passwords must match!');
+      this.props.showSnackbar('The passwords do not match', 'warning');
 
     } else {
 
@@ -81,13 +83,13 @@ class CreateUser extends Component {
       }).then((user) => {
 
         // close the dialog
+        this.props.showSnackbar('The user was created', 'success');
         this.props.callback(user);
 
       }).catch((err) => {
 
         this.setState({loading: false});
-        alert('error, see console for details');
-        console.log(err);
+        this.props.showSnackbar(err.toString(), 'error');
 
       });
 
@@ -215,8 +217,15 @@ class CreateUser extends Component {
 CreateUser.propTypes = {
   createUserMutation: PropTypes.any,
   callback: PropTypes.func.isRequired,
+  showSnackbar: PropTypes.func,
 };
 
-export default compose(
-    graphql(createUserMutation, {name: 'createUserMutation'}),
-)(CreateUser);
+const mapDispatchToProps = {
+  showSnackbar,
+};
+
+export default connect(null, mapDispatchToProps)(
+    compose(
+        graphql(createUserMutation, {name: 'createUserMutation'}),
+    )(CreateUser)
+);
