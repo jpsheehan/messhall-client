@@ -136,6 +136,9 @@ class UserEditDialog extends Component {
         },
         {
           query: getUserDetailsQuery,
+          variables: {
+            id: this.props.user.id,
+          },
         }],
       }).then((user) => {
 
@@ -231,7 +234,7 @@ class UserEditDialog extends Component {
                   type='password'
                   fullWidth
                   min={8}
-                  max={32}
+                  max={128}
                   onChange={(e) => this.setState({password: e.target.value})}
                   disabled={this.state.loading} />
 
@@ -241,7 +244,7 @@ class UserEditDialog extends Component {
                   type='password'
                   fullWidth
                   min={8}
-                  max={32}
+                  max={128}
                   onChange={
                     (e) => this.setState({passwordRepeat: e.target.value})
                   }
