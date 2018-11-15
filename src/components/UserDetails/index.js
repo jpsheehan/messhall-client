@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 
 import {
-  Book as BookIcon,
+  // Book as BookIcon,
   Error as ErrorIcon,
   Edit as EditIcon,
 } from '@material-ui/icons';
@@ -226,15 +226,21 @@ class UserDetails extends Component {
               <Divider />
             </div>
 
-            <Button variant='outlined' disabled>
+            {/* <Button variant='outlined' disabled>
               Manage Bookings
               <BookIcon />
-            </Button>
+            </Button> */}
 
             <List component='nav'>
               <li>
                 <ul>
-                  <ListSubheader>Current Bookings</ListSubheader>
+                  <ListSubheader>
+                    {
+                      currentBookings.length > 0
+                        ? 'Current Bookings'
+                        : 'No Current Bookings'
+                    }
+                  </ListSubheader>
                   {
                     currentBookings.map(
                         (booking, index) =>
@@ -245,7 +251,13 @@ class UserDetails extends Component {
               </li>
               <li>
                 <ul>
-                  <ListSubheader>Previous Bookings</ListSubheader>
+                  <ListSubheader>
+                    {
+                      previousBookings.length > 0
+                        ? 'Previous Bookings'
+                        : 'No Previous Bookings'
+                    }
+                  </ListSubheader>
                   {
                     previousBookings.map(
                         (booking, index) =>
