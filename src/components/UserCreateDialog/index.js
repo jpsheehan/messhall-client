@@ -22,7 +22,7 @@ import {
 } from '@material-ui/icons';
 
 import {showSnackbar} from '../../actions';
-import {createUserMutation, getUsersQuery} from '../../queries';
+import {createUserMutation, userSearchQuery} from '../../queries';
 import * as S from '../../strings';
 import './style.css';
 
@@ -81,7 +81,7 @@ class UserCreateDialog extends Component {
           password: this.state.password,
         },
         refetchQueries: [{
-          query: getUsersQuery,
+          query: userSearchQuery,
         }],
       }).then((user) => {
 
@@ -186,24 +186,24 @@ class UserCreateDialog extends Component {
               disabled={this.state.loading} />
 
             {this.state.loading && <LinearProgress color='primary' />}
+            <DialogActions>
+              <Button
+                type='submit'
+                variant='outlined'
+                disabled={this.state.loading}>
+                Create User
+                <SendIcon />
+              </Button>
+              <Button
+                type='reset'
+                onClick={
+                  (ev) => this.handleResetClick(ev)
+                }
+                disabled={this.state.loading}>
+                Cancel
+              </Button>
+            </DialogActions>
           </form>
-          <DialogActions>
-            <Button
-              type='submit'
-              variant='outlined'
-              disabled={this.state.loading}>
-              Create User
-              <SendIcon />
-            </Button>
-            <Button
-              type='reset'
-              onClick={
-                (ev) => this.handleResetClick(ev)
-              }
-              disabled={this.state.loading}>
-              Cancel
-            </Button>
-          </DialogActions>
         </DialogContent>
       </Dialog>
     );
