@@ -21,7 +21,7 @@ import {
   Edit as EditIcon,
 } from '@material-ui/icons';
 
-import DeleteUserDialog from '../DeleteUserDialog';
+import UserDeleteDialog from '../UserDeleteDialog';
 import UserEditDialog from '../UserEditDialog';
 import {getUserDetailsQuery} from '../../queries';
 import * as S from '../../strings';
@@ -268,7 +268,7 @@ class UserDetails extends Component {
                 </ul>
               </li>
             </List>
-            <DeleteUserDialog
+            <UserDeleteDialog
               user={user}
               onClose={(deleted) => this.handleDeleteUserDialogClose(deleted)}
               open={this.state.deleteUserDialogOpened} />

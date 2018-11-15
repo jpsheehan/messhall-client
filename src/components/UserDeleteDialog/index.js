@@ -20,7 +20,7 @@ import {
 /**
  * The DeleteUserDialog allows an admin to remove a user from the system.
  */
-class DeleteUserDialog extends Component {
+class UserDeleteDialog extends Component {
 
   /**
    * Creates a new instance of DeleteUserDialog.
@@ -137,7 +137,7 @@ class DeleteUserDialog extends Component {
 
 }
 
-DeleteUserDialog.propTypes = {
+UserDeleteDialog.propTypes = {
   user: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -146,4 +146,4 @@ DeleteUserDialog.propTypes = {
 
 export default graphql(deleteUserMutation, {
   name: 'deleteUserMutation',
-})(DeleteUserDialog);
+})(UserDeleteDialog);
