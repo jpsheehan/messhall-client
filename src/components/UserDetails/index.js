@@ -43,7 +43,7 @@ class UserDetails extends Component {
       deletedId: -1,
       updatedUser: null,
       updatedId: -1,
-      deleteUserDialogOpened: false,
+      userDeleteDialogOpened: false,
       userUpdateDialogOpened: false,
     };
 
@@ -54,7 +54,7 @@ class UserDetails extends Component {
    */
   handleDeleteClick() {
 
-    this.setState({deleteUserDialogOpened: true});
+    this.setState({userDeleteDialogOpened: true});
 
   }
 
@@ -74,7 +74,7 @@ class UserDetails extends Component {
   handleDeleteUserDialogClose(deleted) {
 
     this.setState({
-      deleteUserDialogOpened: false,
+      userDeleteDialogOpened: false,
     });
 
     if (deleted) {
@@ -258,7 +258,7 @@ class UserDetails extends Component {
             <UserDeleteDialog
               user={user}
               onClose={(deleted) => this.handleDeleteUserDialogClose(deleted)}
-              open={this.state.deleteUserDialogOpened} />
+              open={this.state.userDeleteDialogOpened} />
             <UserEditDialog
               user={user}
               onClose={(updated) => this.handleUserUpdateDialogClose(updated)}
