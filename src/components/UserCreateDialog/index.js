@@ -10,7 +10,10 @@ import {
   InputLabel,
   FormControl,
   Button,
-  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   LinearProgress,
 } from '@material-ui/core';
 
@@ -84,12 +87,15 @@ class UserCreateDialog extends Component {
 
         // close the dialog
         this.props.showSnackbar('The user was created', 'success');
-        this.props.callback(user);
+        this.props.onClose(user);
 
       }).catch((err) => {
 
-        this.setState({loading: false});
         this.props.showSnackbar(err.toString(), 'error');
+
+      }).finally(() => {
+
+        this.setState({loading: false});
 
       });
 
@@ -103,7 +109,7 @@ class UserCreateDialog extends Component {
    */
   handleResetClick(event) {
 
-    this.props.callback();
+    this.props.onClose(null);
 
   }
 
@@ -114,9 +120,12 @@ class UserCreateDialog extends Component {
   render() {
 
     return (
-
-      <div id='create-user' className='spacing'>
-        <div>
+      <Dialog
+        open={this.props.open}>
+        <DialogTitle id='create-user-dialog-title'>
+          Create New User
+        </DialogTitle>
+        <DialogContent id='create-user' className='spacing'>
           <form onSubmit={this.submitForm.bind(this)}>
 
             <TextField
@@ -172,42 +181,31 @@ class UserCreateDialog extends Component {
               fullWidth
               min={8}
               max={32}
-              onChange={(e) => this.setState({passwordRepeat: e.target.value})}
+              onChange={
+                (e) => this.setState({passwordRepeat: e.target.value})}
               disabled={this.state.loading} />
-
-            <Grid container
-              style={{marginTop: '1em', marginBottom: '1em'}}
-              direction='row'
-              justify='flex-end'>
-              <Grid item>
-                <Button
-                  type='submit'
-                  variant='outlined'
-                  disabled={this.state.loading}>
-                  Create User
-                  <SendIcon />
-                </Button>
-              </Grid>
-              <Grid item>
-                <span style={{marginLeft: 20}}></span>
-              </Grid>
-              <Grid item>
-                <Button
-                  type='reset'
-                  onClick={
-                    (ev) => this.handleResetClick(ev)
-                  }
-                  disabled={this.state.loading}>
-                  Cancel
-                </Button>
-              </Grid>
-            </Grid>
 
             {this.state.loading && <LinearProgress color='primary' />}
           </form>
-        </div>
-      </div>
-
+          <DialogActions>
+            <Button
+              type='submit'
+              variant='outlined'
+              disabled={this.state.loading}>
+              Create User
+              <SendIcon />
+            </Button>
+            <Button
+              type='reset'
+              onClick={
+                (ev) => this.handleResetClick(ev)
+              }
+              disabled={this.state.loading}>
+              Cancel
+            </Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
     );
 
   }
@@ -216,8 +214,9 @@ class UserCreateDialog extends Component {
 
 UserCreateDialog.propTypes = {
   createUserMutation: PropTypes.any,
-  callback: PropTypes.func.isRequired,
   showSnackbar: PropTypes.func,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {

@@ -3,8 +3,7 @@ import React, {Component} from 'react';
 import {
   Button,
   Grid,
-  Dialog,
-  DialogTitle,
+  Typography,
   Paper,
 } from '@material-ui/core';
 
@@ -14,7 +13,7 @@ import {
 
 import UserList from '../UserList';
 import UserDetails from '../UserDetails';
-import CreateUser from '../UserCreateDialog';
+import UserCreateDialog from '../UserCreateDialog';
 import './style.css';
 
 /**
@@ -83,6 +82,9 @@ class AdminPortal extends Component {
           <Grid item container xs={4} direction='column'>
             <Grid item>
               <Paper style={{margin: '1em', padding: '1em'}}>
+                <Typography variant='h6'>
+                  Administrator Tools:
+                </Typography>
                 <Button onClick={(ev) => this.handleCreateUserButtonClick(ev)}>
                   New User
                   <AddIcon />
@@ -97,15 +99,9 @@ class AdminPortal extends Component {
             <UserDetails userId={this.state.selected} />
           </Grid>
         </Grid>
-        <Dialog
-          open={this.state.createUserDialogShown}>
-          <DialogTitle id='create-user-dialog-title'>
-            Create New User
-          </DialogTitle>
-          <CreateUser callback={
-            (user) => this.handleCreateUserDialogClose(user)
-          } />
-        </Dialog>
+        <UserCreateDialog
+          open={this.state.createUserDialogShown}
+          onClose={(ev) => this.handleCreateUserDialogClose(ev)} />
 
       </div>
 
