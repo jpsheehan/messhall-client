@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
+import {connect} from 'react-redux';
 
 import {
   Button,
@@ -14,9 +15,9 @@ import {
   Person as PersonIcon,
 } from '@material-ui/icons';
 
+import {showSnackbar} from '../../actions';
 import {createTokenMutation} from '../../queries';
 import BrandVertical from '../BrandVertical';
-import DialogContainer from '../DialogContainer';
 import * as S from '../../strings';
 
 /**
@@ -36,7 +37,6 @@ class SignIn extends Component {
       password: '',
       loading: false,
     };
-    this.dialogRef = React.createRef();
 
   }
 
@@ -92,31 +92,30 @@ class SignIn extends Component {
       } catch (err) {
 
         console.error(err);
-        this.showUnknownError();
+        this.props.showSnackbar(S.errors.unknown.message, 'warning');
 
       }
 
     }).catch((err) => {
 
       const msg = err.toString();
-      const dialog = this.dialogRef.current;
 
       if (msg.indexOf(S.gqlResponseInvalidCredentials) !== -1) {
 
         // email or password was incorrect
-        dialog.showError('authentication');
+        this.props.showSnackbar(S.errors.authentication.message, 'warning');
 
       } else if (msg.indexOf(S.gqlResponseInvalidPermissions) !== -1) {
 
         // users aren't allowed to use this portal!
-        dialog.showError('authorization');
+        this.props.showSnackbar(S.errors.authorization.message, 'warning');
 
 
       } else {
 
         // something else went wrong
         console.error(err);
-        dialog.showError('unknown');
+        this.props.showSnackbar(S.errors.unknown.message, 'warning');
 
       }
 
@@ -135,73 +134,71 @@ class SignIn extends Component {
   render() {
 
     return (
-      <DialogContainer ref={this.dialogRef}>
-        <Grid
-          container
-          spacing={0}
-          directions='column'
-          alignItems='center'
-          justify='center'>
-          <Grid item xs={3}>
-            <Paper
-              id='sign-in'>
-              <BrandVertical />
+      <Grid
+        container
+        spacing={0}
+        directions='column'
+        alignItems='center'
+        justify='center'>
+        <Grid item xs={3}>
+          <Paper
+            id='sign-in'>
+            <BrandVertical />
+
+            <br />
+
+            <form onSubmit={(ev) => this.onFormSubmit(ev)}>
+
+              <TextField
+                id='sign-in-email'
+                label='Email'
+                type='email'
+                fullWidth
+                margin='dense'
+                autoFocus
+                placeholder={S.placeholderEmail}
+                onChange={(e) => this.setState({email: e.target.value})}
+                disabled={this.state.loading} />
+
+              <TextField
+                id='sign-in-password'
+                label='Password'
+                type='password'
+                fullWidth
+                margin='normal'
+                onChange={(e) => this.setState({password: e.target.value})}
+                disabled={this.state.loading} />
 
               <br />
+              <br />
 
-              <form onSubmit={(ev) => this.onFormSubmit(ev)}>
-
-                <TextField
-                  id='sign-in-email'
-                  label='Email'
-                  type='email'
-                  fullWidth
-                  margin='dense'
-                  autoFocus
-                  placeholder={S.placeholderEmail}
-                  onChange={(e) => this.setState({email: e.target.value})}
-                  disabled={this.state.loading} />
-
-                <TextField
-                  id='sign-in-password'
-                  label='Password'
-                  type='password'
-                  fullWidth
-                  margin='normal'
-                  onChange={(e) => this.setState({password: e.target.value})}
-                  disabled={this.state.loading} />
-
-                <br />
-                <br />
-
-                <Grid container justify='space-between'>
-                  <Grid item>
-                    <Button
-                      type='submit'
-                      variant='outlined'
-                      disabled={this.state.loading}>
-                      {S.buttonSignIn}
-                      <PersonIcon />
-                    </Button>
-                  </Grid>
-
-                  <Grid item>
-                    <Button
-                      onClick={(ev) => this.onForgotPasswordClick(ev)}
-                      disabled={this.state.loading}>
-                      {S.buttonForgotPassword}
-                    </Button>
-                  </Grid>
+              <Grid container justify='space-between'>
+                <Grid item>
+                  <Button
+                    type='submit'
+                    variant='outlined'
+                    disabled={this.state.loading}>
+                    {S.buttonSignIn}
+                    <PersonIcon />
+                  </Button>
                 </Grid>
 
-              </form>
-              <br />
-              {this.state.loading && <LinearProgress variant='query' />}
-            </Paper>
+                <Grid item>
+                  <Button
+                    onClick={(ev) => this.onForgotPasswordClick(ev)}
+                    disabled={this.state.loading}>
+                    {S.buttonForgotPassword}
+                  </Button>
+                </Grid>
+              </Grid>
 
-          </Grid>
+            </form>
+            <br />
+            {this.state.loading && <LinearProgress variant='query' />}
+          </Paper>
+
         </Grid>
-      </DialogContainer>
+      </Grid>
     );
 
   }
@@ -211,8 +208,15 @@ class SignIn extends Component {
 SignIn.propTypes = {
   createTokenMutation: PropTypes.any,
   history: PropTypes.any,
+  showSnackbar: PropTypes.func,
 };
 
-export default compose(
-    graphql(createTokenMutation, {name: 'createTokenMutation'}),
-)(SignIn);
+const mapDispatchToProps = {
+  showSnackbar,
+};
+
+export default connect(null, mapDispatchToProps)(
+    compose(
+        graphql(createTokenMutation, {name: 'createTokenMutation'}),
+    )(SignIn)
+);
