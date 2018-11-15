@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {graphql} from 'react-apollo';
+import {Query} from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import {
@@ -40,7 +40,6 @@ class UserDetails extends Component {
 
     super(props);
     this.state = {
-      loading: false,
       deletedId: -1,
       updatedUser: null,
       updatedId: -1,
@@ -111,33 +110,21 @@ class UserDetails extends Component {
 
   /**
    * Displays the details about the particular user.
+   * @param {Boolean} loading
+   * @param {Object} error
+   * @param {Object} data
    * @return {*}
    */
-  displayUserDetails() {
+  displayUserDetails(loading, error, data) {
 
     // get the user data from the updatedUser if neccessary
     // otherwise get it from the props
-    const data = this.state.updatedUser &&
+    data = this.state.updatedUser &&
       (this.state.updatedId === this.props.userId)
         ? {user: this.state.updatedUser}
-        : this.props.data;
+        : data;
 
-    if (data.loading) {
-
-      // data is not ready
-      if (this.state.loading === false) {
-
-        this.setState({loading: true});
-
-      }
-
-    } else {
-
-      if (this.state.loading === true) {
-
-        this.setState({loading: false});
-
-      }
+    if (!loading) {
 
       if (data.user && data.user.id === this.props.userId) {
 
@@ -332,8 +319,20 @@ class UserDetails extends Component {
       // we have a userId so we can show the loading and user details
       return (
         <Paper id='user-details'>
-          {this.state.loading && <LinearProgress color='primary' />}
-          {this.displayUserDetails()}
+          <Query
+            query={getUserDetailsQuery}
+            variables={{id: this.props.userId}}>
+            {
+              ({loading, error, data}) => {
+
+                return (<div>
+                  {loading && <LinearProgress color='primary' />}
+                  {this.displayUserDetails(loading, error, data)}
+                </div>);
+
+              }
+            }
+          </Query>
         </Paper>
       );
 
@@ -353,14 +352,4 @@ UserDetails.propTypes = {
   userId: PropTypes.number,
 };
 
-export default graphql(getUserDetailsQuery, {
-  options: (props) => {
-
-    return {
-      variables: {
-        id: props.userId,
-      },
-    };
-
-  },
-})(UserDetails);
+export default UserDetails;
