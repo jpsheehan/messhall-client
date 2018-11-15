@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
+import {connect} from 'react-redux';
 
 import {
   Button,
@@ -15,10 +16,10 @@ import {
   Lock as LockIcon,
 } from '@material-ui/icons';
 
+import {showSnackbar} from '../../actions';
 import BrandVertical from '../BrandVertical';
 import {createPasswordResetMutation} from '../../queries';
 import * as S from '../../strings';
-import DialogContainer from '../DialogContainer';
 
 /**
  * The component for requesting a password reset for admins and managers.
@@ -37,7 +38,6 @@ class ForgotPassword extends Component {
       loading: false,
       sent: false,
     };
-    this.dialogRef = React.createRef();
 
   }
 
@@ -57,8 +57,6 @@ class ForgotPassword extends Component {
    */
   onFormSubmit(event) {
 
-    const dialog = this.dialogRef.current;
-
     event.preventDefault();
 
     this.setState({loading: true});
@@ -73,21 +71,22 @@ class ForgotPassword extends Component {
 
         const email = data.createPasswordResetMutation.email;
 
-        dialog.showMessage(
-            S.forgotPasswordDialogTitle,
-            S.forgotPasswordDialogMessage.replace('$EMAIL', email),
-            () => {
+        this.props.showSnackbar(
+            S.forgotPasswordDialogMessage.replace('$EMAIL', email), 'info');
 
-              this.props.history.push('/sign-in');
+        // TODO: add this as a callback for when the snackbar closes
+        // () => {
 
-            });
+        //   this.props.history.push('/sign-in');
+
+        // };
 
         this.setState({sent: true});
 
       } catch (err) {
 
         console.error(err);
-        dialog.showError('unknown');
+        this.props.showSnackbar(S.errors.unknown.message, 'warning');
 
       }
 
@@ -98,14 +97,13 @@ class ForgotPassword extends Component {
       if (msg.indexOf(S.gqlResponseInvalidPermissions) !== -1) {
 
         // users aren't allowed to use this portal!
-        dialog.showError('authorization');
-
+        this.props.showSnackbar(S.errors.authorization.message);
 
       } else {
 
         // something else went wrong
         console.error(err);
-        dialog.showError('unknown');
+        this.props.showSnackbar(S.errors.unknown.message, 'warning');
 
       }
 
@@ -123,67 +121,63 @@ class ForgotPassword extends Component {
   render() {
 
     return (
-      <DialogContainer ref={this.dialogRef}>
-        <Grid
-          container
-          spacing={0}
-          directions='column'
-          alignItems='center'
-          justify='center'>
-          <Grid item xs={3}>
-            <Paper
-              id='sign-in'>
-              <BrandVertical />
+      <Grid
+        container
+        spacing={0}
+        directions='column'
+        alignItems='center'
+        justify='center'>
+        <Grid item xs={3}>
+          <Paper
+            id='sign-in'>
+            <BrandVertical />
+
+            <br />
+
+            <Typography>
+              Reset your password by filling out the form below.
+              A password reset link will be sent to your email address.
+            </Typography>
+
+            <form onSubmit={(ev) => this.onFormSubmit(ev)}>
+
+              <TextField
+                id='sign-in-email'
+                label='Email'
+                type='email'
+                fullWidth
+                autoFocus
+                placeholder={S.placeholderEmail}
+                onChange={(e) => this.setState({email: e.target.value})}
+                disabled={this.state.loading && !this.state.sent} />
 
               <br />
-
-              <Typography>
-                Reset your password by filling out the form below.
-                A password reset link will be sent to your email address.
-              </Typography>
-
-              <form onSubmit={(ev) => this.onFormSubmit(ev)}>
-
-                <TextField
-                  id='sign-in-email'
-                  label='Email'
-                  type='email'
-                  fullWidth
-                  autoFocus
-                  placeholder={S.placeholderEmail}
-                  onChange={(e) => this.setState({email: e.target.value})}
-                  disabled={this.state.loading && !this.state.sent} />
-
-                <br />
-                <br />
-                <Grid container justify='space-between'>
-                  <Grid item>
-                    <Button
-                      type='submit'
-                      variant='outlined'
-                      disabled={this.state.loading && !this.state.sent}>
-                      Reset
-                      <LockIcon />
-                    </Button>
-                  </Grid>
-
-                  <Grid item>
-                    <Button
-                      onClick={(ev) => this.onBackClick(ev)}
-                      disabled={this.state.loading}>
-                      Back
-                    </Button>
-                  </Grid>
+              <br />
+              <Grid container justify='space-between'>
+                <Grid item>
+                  <Button
+                    type='submit'
+                    variant='outlined'
+                    disabled={this.state.loading && !this.state.sent}>
+                    Reset
+                    <LockIcon />
+                  </Button>
                 </Grid>
 
-
-              </form>
-              <br />
-              {this.state.loading && <LinearProgress variant='query' />}
-            </Paper>
-          </Grid>
+                <Grid item>
+                  <Button
+                    onClick={(ev) => this.onBackClick(ev)}
+                    disabled={this.state.loading}>
+                    Back
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+            <br />
+            {this.state.loading && <LinearProgress variant='query' />}
+          </Paper>
         </Grid>
-      </DialogContainer>
+      </Grid>
     );
 
   }
@@ -193,8 +187,16 @@ class ForgotPassword extends Component {
 ForgotPassword.propTypes = {
   createPasswordResetMutation: PropTypes.any,
   history: PropTypes.any,
+  showSnackbar: PropTypes.func,
 };
 
-export default compose(
-    graphql(createPasswordResetMutation, {name: 'createPasswordResetMutation'}),
-)(ForgotPassword);
+const mapDispatchToProps = {
+  showSnackbar,
+};
+
+export default connect(null, mapDispatchToProps)(
+    compose(
+        graphql(createPasswordResetMutation, {
+          name: 'createPasswordResetMutation'}),
+    )(ForgotPassword)
+);
