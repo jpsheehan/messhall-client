@@ -4,6 +4,7 @@ import {Query} from 'react-apollo';
 import {connect} from 'react-redux';
 
 import {
+  Typography,
   Grid,
   Table,
   TableRow,
@@ -125,7 +126,9 @@ class UserList extends Component {
               selected={this.state.selectedIndex === index}
               onClick={(ev) => this.handleListItemClick(ev, index, user)}>
               <TableCell>
-                {user.name}
+                <Typography>
+                  {user.name}
+                </Typography>
               </TableCell>
               <TableCell>
                 {user.id}
