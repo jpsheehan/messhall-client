@@ -16,7 +16,7 @@ import {
   Paper,
 } from '@material-ui/core';
 
-import {showSnackbar} from '../../actions';
+import {showSnackbar, setSearchTerm} from '../../actions';
 import {userSearchQuery} from '../../queries';
 import './style.css';
 
@@ -35,7 +35,6 @@ class UserList extends Component {
     this.state = {
       selectedIndex: -1,
       error: false,
-      searchTerm: '',
     };
 
   }
@@ -145,13 +144,11 @@ class UserList extends Component {
 
     event.preventDefault();
 
-    const searchTerm = document.querySelector('#user-list-search')
-        .value
-        .toLowerCase();
+    this.props.setSearchTerm(
+        document.querySelector('#user-list-search').value);
 
     this.setState({
       selectedIndex: -1,
-      searchTerm,
       error: false,
     });
 
@@ -167,7 +164,7 @@ class UserList extends Component {
       <Paper id='user-list'>
         <Query
           query={userSearchQuery}
-          variables={{nameOrId: this.state.searchTerm}}>
+          variables={{nameOrId: this.props.searchTerm}}>
           {
             ({loading, error, data}) =>
 
@@ -224,10 +221,21 @@ class UserList extends Component {
 UserList.propTypes = {
   callback: PropTypes.func,
   showSnackbar: PropTypes.func,
+  setSearchTerm: PropTypes.func,
+  searchTerm: PropTypes.string,
 };
 
 const mapDispatchToProps = {
   showSnackbar,
+  setSearchTerm,
 };
 
-export default connect(null, mapDispatchToProps)(UserList);
+const mapStateToProps = (state) => {
+
+  return {
+    searchTerm: state.search.term,
+  };
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserList);
