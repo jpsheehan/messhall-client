@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {graphql, compose} from 'react-apollo';
+import {connect} from 'react-redux';
 
 import {
   Dialog,
@@ -20,6 +21,7 @@ import {
   Save as SaveIcon,
 } from '@material-ui/icons';
 
+import {showSnackbar} from '../../actions';
 import {
   editUserMutation,
   userSearchQuery,
@@ -63,7 +65,7 @@ class UserEditDialog extends Component {
     if (this.state.password !== this.state.passwordRepeat) {
 
       // the passwords do not match!
-      alert('The passwords must match!');
+      this.props.showSnackbar('The passwords do not match.', 'warning');
 
     } else {
 
@@ -128,6 +130,9 @@ class UserEditDialog extends Component {
         },
         refetchQueries: [{
           query: userSearchQuery,
+          variables: {
+            nameOrId: this.props.searchTerm,
+          },
         },
         {
           query: getUserDetailsQuery,
@@ -135,11 +140,12 @@ class UserEditDialog extends Component {
       }).then((user) => {
 
         // close the dialog
+        this.props.showSnackbar('The user was updated', 'success');
         this.props.onClose(user);
 
       }).catch((err) => {
 
-        alert('error, see console for details');
+        this.props.showSnackbar(err.toString(), 'error');
         console.log(err);
 
       }).finally(() => {
@@ -275,8 +281,24 @@ UserEditDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
+  searchTerm: PropTypes.string,
+  showSnackbar: PropTypes.func,
 };
 
-export default compose(
-    graphql(editUserMutation, {name: 'editUserMutation'}),
-)(UserEditDialog);
+const mapDispatchToProps = {
+  showSnackbar,
+};
+
+const mapStateToProps = (state) => {
+
+  return {
+    searchTerm: state.search.term,
+  };
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    compose(
+        graphql(editUserMutation, {name: 'editUserMutation'}),
+    )(UserEditDialog)
+);

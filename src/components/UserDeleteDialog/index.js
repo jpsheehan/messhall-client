@@ -20,7 +20,7 @@ import {
 import {showSnackbar} from '../../actions';
 
 /**
- * The DeleteUserDialog allows an admin to remove a user from the system.
+ * The UserDeleteDialog allows an admin to remove a user from the system.
  */
 class UserDeleteDialog extends Component {
 
@@ -50,6 +50,9 @@ class UserDeleteDialog extends Component {
       },
       refetchQueries: [{
         query: userSearchQuery,
+        variables: {
+          nameOrId: this.props.searchTerm,
+        },
       }],
     }).then((user) => {
 
@@ -151,13 +154,22 @@ UserDeleteDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   deleteUserMutation: PropTypes.func,
   showSnackbar: PropTypes.func,
+  searchTerm: PropTypes.string,
 };
 
 const mapDispatchToProps = {
   showSnackbar,
 };
 
-export default connect(null, mapDispatchToProps)(
+const mapStateToProps = (state) => {
+
+  return {
+    searchTerm: state.search.term,
+  };
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
     graphql(deleteUserMutation, {
       name: 'deleteUserMutation',
     })(UserDeleteDialog)

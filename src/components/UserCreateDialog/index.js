@@ -82,6 +82,9 @@ class UserCreateDialog extends Component {
         },
         refetchQueries: [{
           query: userSearchQuery,
+          variables: {
+            nameOrId: this.props.searchTerm,
+          },
         }],
       }).then((user) => {
 
@@ -217,13 +220,22 @@ UserCreateDialog.propTypes = {
   showSnackbar: PropTypes.func,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string,
 };
 
 const mapDispatchToProps = {
   showSnackbar,
 };
 
-export default connect(null, mapDispatchToProps)(
+const mapStateToProps = (state) => {
+
+  return {
+    searchTerm: state.search.term,
+  };
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
     compose(
         graphql(createUserMutation, {name: 'createUserMutation'}),
     )(UserCreateDialog)
