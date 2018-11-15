@@ -34,7 +34,6 @@ class UserList extends Component {
     super(props);
     this.state = {
       selectedIndex: -1,
-      loading: false,
       error: false,
       searchTerm: '',
     };
