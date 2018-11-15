@@ -18,7 +18,7 @@ class SnackbarProvider extends Component {
 
     const {snackbar} = this.props;
 
-    if (snackbar) {
+    if (snackbar.variant) {
 
       return (
         <PremadeSnackbar
