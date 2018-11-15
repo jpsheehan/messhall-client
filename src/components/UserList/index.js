@@ -63,21 +63,7 @@ class UserList extends Component {
    */
   renderTabularData(loading, error, data) {
 
-    if (loading) {
-
-      if (this.state.loading === false) {
-
-        this.setState({loading: true});
-
-      }
-
-    } else {
-
-      if (this.state.loading === true) {
-
-        this.setState({loading: false});
-
-      }
+    if (!loading) {
 
       if (error) {
 
@@ -180,52 +166,55 @@ class UserList extends Component {
 
     return (
       <Paper id='user-list'>
-        <Grid container direction='column'>
-          <Grid item>
-            {this.state.loading && <LinearProgress color='primary' />}
-          </Grid>
-          <Grid item>
-            <form onSubmit={(ev) => this.handleSearchSubmit(ev)}>
-              <TextField
-                id='user-list-search'
-                label='Search users...'
-                type='search'
-                fullWidth
-                margin='dense'
-                disabled={this.state.loading}
-                autoFocus />
-            </form>
-          </Grid>
-        </Grid>
+        <Query
+          query={userSearchQuery}
+          variables={{nameOrId: this.state.searchTerm}}>
+          {
+            ({loading, error, data}) =>
 
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                Name
-              </TableCell>
-              <TableCell>
-                ID
-              </TableCell>
-              <TableCell>
-                Current Bookings
-              </TableCell>
-              <TableCell>
-                Total Bookings
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <Query
-              query={userSearchQuery}
-              variables={{nameOrId: this.state.searchTerm}}>
-              {
-                ({loading, error, data}) =>
-                  this.renderTabularData(loading, error, data)
-              }
-            </Query>
-          </TableBody>
-        </Table>
+              (<div>
+                <Grid container direction='column'>
+                  <Grid item>
+                    {loading && <LinearProgress color='primary' />}
+                  </Grid>
+                  <Grid item>
+                    <form onSubmit={(ev) => this.handleSearchSubmit(ev)}>
+                      <TextField
+                        id='user-list-search'
+                        label='Search users...'
+                        type='search'
+                        fullWidth
+                        margin='dense'
+                        disabled={loading}
+                        autoFocus />
+                    </form>
+                  </Grid>
+                </Grid>
+
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>
+                        Name
+                      </TableCell>
+                      <TableCell>
+                        ID
+                      </TableCell>
+                      <TableCell>
+                        Current Bookings
+                      </TableCell>
+                      <TableCell>
+                        Total Bookings
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {this.renderTabularData(loading, error, data)}
+                  </TableBody>
+                </Table>
+              </div>)
+          }
+        </Query>
       </Paper>
     );
 
