@@ -148,7 +148,7 @@ class UserList extends Component {
 
     }
 
-    return (<div></div>);
+    return (<TableRow></TableRow>);
 
   }
 
