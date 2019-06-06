@@ -1,7 +1,8 @@
 {
   "name": "messhall-client",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "GPL-3.0-only",
   "dependencies": {
     "@material-ui/core": "^3.4.0",
     "@material-ui/icons": "^3.0.1",
